@@ -1,1 +1,2 @@
 anthropic>=0.100
+google-genai>=1.0

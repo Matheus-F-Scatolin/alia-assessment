@@ -21,11 +21,14 @@ medallion dataset. Everything below is on `main` and works:
 - `tools.py` — six agent tools + Anthropic schemas in `TOOLS`, dispatched via
   `run_tool(medallion, name, args)`: `search_entities`, `get_entity`,
   `search_golds`, `get_gold`, `get_silvers`, `get_bronze`.
-- `answer.py` — CLI agent loop (Claude tool-use). Importable pieces you should
+- `answer.py` — CLI agent loop (dual-provider tool-use: `claude-*` models via
+  the Anthropic API, `gemini-*` via the Gemini API; default `gemini-3.5-flash`).
+  Importable pieces you should
   reuse: `SYSTEM_PROMPT`, `MODEL`, `load_env()`. The loop itself is ~40 lines in
   `answer()`; **copy it into your server and add event hooks** rather than
   importing the function — you need to emit an event per tool call / text chunk.
-- `.env` — has `ANTHROPIC_API_KEY` (and `GEMINI_API_KEY`, irrelevant to you).
+- `.env` — has `ANTHROPIC_API_KEY` and `GEMINI_API_KEY` (the default model is
+  a Gemini one, so both matter now).
   Python venv: `.venv/` with `anthropic` installed.
 
 Run `python data.py` and `python tools.py` (smoke checks) and
@@ -128,8 +131,8 @@ P2 — polish:
    vs "evento"): a different chip shape/color, kept inline, clickable to a side
    card. **Implement their spec**: citations to KG entities get a different
    chip shape than gold/silver/bronze citations, and both stay inline.
-9. History sidebar (localStorage), model picker (default from `ALIA_MODEL` env
-   or `claude-sonnet-5`), per-answer stats (latency, tool calls, tokens),
+9. History sidebar (localStorage), model picker (default from `answer.MODEL`, i.e. `ALIA_MODEL` env
+   or `gemini-3.5-flash` — the eval winner), per-answer stats (latency, tool calls, tokens),
    keyboard: `/` focuses input, `Esc` closes drawer.
 
 ### Acceptance checklist

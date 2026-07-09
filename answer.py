@@ -3,11 +3,15 @@
 Uso:
     python answer.py "Bernardo e Lucas estão alinhados sobre as camadas do medallion?"
 
-Um agente Claude com tool-use navega o medallion: resolve entidades no
+Um agente LLM com tool-use navega o medallion: resolve entidades no
 knowledge graph, encontra as narrativas gold relevantes, desce o lineage
 até os silvers e bronzes, e responde em português citando os IDs usados.
 Os IDs citados no rodapé "Lineage" vêm do rastreio das tool calls reais —
 não do texto do modelo — então não podem ser alucinados.
+
+Modelo default: gemini-3.5-flash (melhor score e ~2.3x mais barato que Opus
+no eval em eval/ — ver eval/report.html). Override com ALIA_MODEL; modelos
+"claude-*" usam a API Anthropic, "gemini-*" usam a API Gemini.
 """
 
 from __future__ import annotations
@@ -17,12 +21,10 @@ import os
 import sys
 from pathlib import Path
 
-import anthropic
-
 from data import Medallion
 from tools import TOOLS, run_tool
 
-MODEL = os.environ.get("ALIA_MODEL", "claude-sonnet-5")
+MODEL = os.environ.get("ALIA_MODEL", "gemini-3.5-flash")
 MAX_TURNS = 15
 
 SYSTEM_PROMPT = """\
@@ -73,58 +75,112 @@ def load_env(path: Path = Path(__file__).parent / ".env") -> None:
             os.environ.setdefault(key.strip(), val.strip().strip("'\""))
 
 
-def answer(question: str) -> str:
-    medallion = Medallion()
-    client = anthropic.Anthropic()
+def provider_of(model: str) -> str:
+    return "gemini" if model.startswith("gemini") else "anthropic"
 
+
+def _exec_tool(medallion: Medallion, fetched: dict, name: str, args: dict):
+    """Executa uma tool com trace no stderr e rastreio de lineage."""
+    print(f"  → {name}({json.dumps(args, ensure_ascii=False)})", file=sys.stderr)
+    result = run_tool(medallion, name, args)
+    if name == "get_gold" and isinstance(result, dict) and "error" not in result:
+        fetched["gold"].add(args["gold_id"])
+    elif name == "get_silvers" and isinstance(result, list):
+        for s in result:
+            if isinstance(s, dict) and "error" not in s:
+                fetched["silver"].add(s["id"])
+    elif name == "get_bronze" and isinstance(result, dict) and "error" not in result:
+        fetched["bronze"].add(args["bronze_id"])
+    return result
+
+
+def _loop_anthropic(medallion: Medallion, question: str, model: str,
+                    fetched: dict) -> str:
+    import anthropic
+
+    client = anthropic.Anthropic()
     messages = [{"role": "user", "content": question}]
-    fetched = {"gold": set(), "silver": set(), "bronze": set()}
     final_text = ""
 
     for _ in range(MAX_TURNS):
         response = client.messages.create(
-            model=MODEL,
-            max_tokens=4000,
-            system=SYSTEM_PROMPT,
-            tools=TOOLS,
-            messages=messages,
+            model=model, max_tokens=4000, system=SYSTEM_PROMPT,
+            tools=TOOLS, messages=messages,
         )
-
         tool_results = []
         for block in response.content:
             if block.type == "text":
                 final_text = block.text
             elif block.type == "tool_use":
-                print(f"  → {block.name}({json.dumps(block.input, ensure_ascii=False)})",
-                      file=sys.stderr)
-                result = run_tool(medallion, block.name, block.input)
-                _track(fetched, block.name, block.input, result)
+                result = _exec_tool(medallion, fetched, block.name, block.input)
                 tool_results.append({
                     "type": "tool_result",
                     "tool_use_id": block.id,
                     "content": json.dumps(result, ensure_ascii=False),
                 })
-
         if response.stop_reason != "tool_use":
-            break
+            return final_text
         messages.append({"role": "assistant", "content": response.content})
         messages.append({"role": "user", "content": tool_results})
-    else:
-        final_text += "\n\n[aviso: limite de iterações do agente atingido]"
 
-    return final_text + _lineage_footer(fetched)
+    return final_text + "\n\n[aviso: limite de iterações do agente atingido]"
 
 
-def _track(fetched: dict, name: str, args: dict, result) -> None:
-    """Registra os IDs realmente consultados, para o rodapé de lineage."""
-    if name == "get_gold" and isinstance(result, dict) and "error" not in result:
-        fetched["gold"].add(args["gold_id"])
-    elif name == "get_silvers":
-        for s in result:
-            if "error" not in s:
-                fetched["silver"].add(s["id"])
-    elif name == "get_bronze" and isinstance(result, dict) and "error" not in result:
-        fetched["bronze"].add(args["bronze_id"])
+def _loop_gemini(medallion: Medallion, question: str, model: str,
+                 fetched: dict) -> str:
+    from google import genai
+    from google.genai import types
+
+    client = genai.Client()  # GEMINI_API_KEY do ambiente
+    config = types.GenerateContentConfig(
+        system_instruction=SYSTEM_PROMPT,
+        tools=[types.Tool(function_declarations=[
+            types.FunctionDeclaration(
+                name=t["name"], description=t["description"],
+                parameters=t["input_schema"],
+            )
+            for t in TOOLS
+        ])],
+        max_output_tokens=4000,
+    )
+    contents = [types.Content(role="user", parts=[types.Part(text=question)])]
+    final_text = ""
+
+    for _ in range(MAX_TURNS):
+        response = client.models.generate_content(
+            model=model, contents=contents, config=config,
+        )
+        candidate = response.candidates[0] if response.candidates else None
+        if candidate is None or candidate.content is None:
+            return final_text + "\n\n[aviso: resposta vazia do modelo]"
+
+        parts = candidate.content.parts or []
+        texts = [p.text for p in parts if p.text]
+        if texts:
+            final_text = "\n".join(texts)
+        calls = [p.function_call for p in parts if p.function_call]
+        if not calls:
+            return final_text
+
+        contents.append(candidate.content)
+        response_parts = []
+        for fc in calls:
+            args = dict(fc.args or {})
+            result = _exec_tool(medallion, fetched, fc.name, args)
+            response_parts.append(types.Part.from_function_response(
+                name=fc.name, response={"result": result},
+            ))
+        contents.append(types.Content(role="user", parts=response_parts))
+
+    return final_text + "\n\n[aviso: limite de iterações do agente atingido]"
+
+
+def answer(question: str, model: str = MODEL) -> str:
+    medallion = Medallion()
+    fetched = {"gold": set(), "silver": set(), "bronze": set()}
+    loop = _loop_gemini if provider_of(model) == "gemini" else _loop_anthropic
+    text = loop(medallion, question, model, fetched)
+    return text + _lineage_footer(fetched)
 
 
 def _lineage_footer(fetched: dict) -> str:
@@ -142,11 +198,13 @@ def main() -> None:
         print('uso: python answer.py "sua pergunta sobre a Alia"', file=sys.stderr)
         sys.exit(1)
     load_env()
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("erro: defina ANTHROPIC_API_KEY (ou coloque no .env)", file=sys.stderr)
+    key = "GEMINI_API_KEY" if provider_of(MODEL) == "gemini" else "ANTHROPIC_API_KEY"
+    if not os.environ.get(key):
+        print(f"erro: defina {key} (ou coloque no .env) para o modelo {MODEL}",
+              file=sys.stderr)
         sys.exit(1)
     question = " ".join(sys.argv[1:])
-    print(f"Pergunta: {question}\n", file=sys.stderr)
+    print(f"Pergunta: {question}\nModelo: {MODEL}\n", file=sys.stderr)
     print(answer(question))
 
 
