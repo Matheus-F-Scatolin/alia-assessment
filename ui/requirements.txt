@@ -1,0 +1,6 @@
+# UI server deps. Root already provides `anthropic` (reused via sys.path).
+# Plain uvicorn (no [standard]) to avoid uvloop wheels that lag new Python
+# releases — the asyncio/h11 loop streams SSE fine for a local single user.
+anthropic>=0.100
+fastapi>=0.110
+uvicorn>=0.30
