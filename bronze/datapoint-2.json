@@ -1,0 +1,60 @@
+{
+  "id": "bronze-meet-002",
+  "source": "google_meet",
+  "meeting_title": "Sync Thomas e Bernardo — Gold Demo e Alinhamentos",
+  "meeting_id": "meet-adc-kscq-eea",
+  "captured_at": "2026-04-20T12:03:36-03:00",
+  "participants": ["Person:Thomas Filshill", "Person:Bernardo Aires"],
+  "transcript": [
+    {
+      "ts": "2026-04-20T12:05:10-03:00",
+      "speaker": "Person:Bernardo Aires",
+      "text": "rodei o Gold contra a pergunta 'Bernardo e Lucas estão alinhados sobre as camadas do medallion'. ele puxou tudo: discussão de silver/gold, opção de coluna nulável, decisão adiada."
+    },
+    {
+      "ts": "2026-04-20T12:07:42-03:00",
+      "speaker": "Person:Bernardo Aires",
+      "text": "aí rodei de novo pra entity layer. o Gold pegou a saída do Henrique sozinho, mesmo sem eu perguntar. mostrou que o entity layer ficou órfão."
+    },
+    {
+      "ts": "2026-04-20T12:09:55-03:00",
+      "speaker": "Person:Thomas Filshill",
+      "text": "tempo de resposta?"
+    },
+    {
+      "ts": "2026-04-20T12:10:07-03:00",
+      "speaker": "Person:Bernardo Aires",
+      "text": "3 a 4 minutos dependendo da profundidade da pergunta. primeira vez; depois cacheia."
+    },
+    {
+      "ts": "2026-04-20T12:12:03-03:00",
+      "speaker": "Person:Thomas Filshill",
+      "text": "sensacional. vai ao ar hoje pros pilotos. funcional e core. NGCash pode entrar como design partner essa semana, eles abriram em 5 mil, tô puxando pra 6 ou 6.5."
+    },
+    {
+      "ts": "2026-04-20T12:18:30-03:00",
+      "speaker": "Person:Thomas Filshill",
+      "text": "sobre Alia Meetings — o bot tá entrando em chamada do Meet, transcrevendo, jogando no bronze. Lucas tocou o bulk do bot. 4 a 8 reuniões por dia com o André testando."
+    },
+    {
+      "ts": "2026-04-20T12:24:15-03:00",
+      "speaker": "Person:Bernardo Aires",
+      "text": "e tem aquela questão de como evidências de entidades aparecem no dash. silver tá claro (slack, meet, github). entidades — clicável pra abrir detalhe?"
+    },
+    {
+      "ts": "2026-04-20T12:25:40-03:00",
+      "speaker": "Person:Thomas Filshill",
+      "text": "tô refinando com Mati, Veronica e Lidia. fica em aberto por enquanto. marquei call com eles pra essa semana."
+    },
+    {
+      "ts": "2026-04-20T12:28:00-03:00",
+      "speaker": "Person:Thomas Filshill",
+      "text": "dois modos do Gold ficam definidos: verbose pro CEO (follow-ups conversacionais), sistemático retornando JSON pra preencher o painel de alinhamento. no sistemático as entidades já tão resolvidas porque a gente cruza pessoas trabalhando nos mesmos projetos."
+    },
+    {
+      "ts": "2026-04-20T12:30:12-03:00",
+      "speaker": "Person:Bernardo Aires",
+      "text": "edge case: dois Lucas no mesmo projeto. mas é problema pro time também, não só pro Gold."
+    }
+  ]
+}

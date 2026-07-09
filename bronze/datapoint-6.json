@@ -1,0 +1,10 @@
+{
+  "id": "bronze-notion-006",
+  "source": "notion",
+  "page_title": "Reunião Alia <> VTEX — Tooling Scope",
+  "page_id": "notion-vtex-sync-01",
+  "captured_at": "2026-04-20T17:59:00-03:00",
+  "participants": ["Person:Thomas Filshill", "Person:Anderson Queiroz"],
+  "author": "Person:Thomas Filshill",
+  "body": "## Objetivo\nDefinir MVP de ferramenta Alia sobre dados da VTEX para o COO deles.\n\n## Pontos\n- Anderson topou o piloto conceitualmente; precisa voltar com lista de datasets liberados.\n- VTEX tem restrição forte de exposição de dados de clientes merchants — qualquer PII sai da conta.\n- Proposta inicial do Thomas: começar com dados internos (eng, produto) e só depois migrar para dados comerciais.\n- Prazos: Anderson se comprometeu a voltar com scope até 2026-04-28.\n\n## Decisões\n- [ ] Aguardar lista de datasets do Anderson.\n- [ ] Thomas alinhar com Bernardo se sistematic Gold serve para o primeiro piloto sem customização.\n- [ ] Quando fechar escopo, Bernardo define quais silvers VTEX precisa antes dos golds."
+}

@@ -1,0 +1,30 @@
+{
+  "id": "bronze-email-005",
+  "source": "email",
+  "subject": "Alia <> NGCash — Design Partner",
+  "thread_id": "email-ngcash-dp-01",
+  "captured_at": "2026-04-19T21:48:10-03:00",
+  "messages": [
+    {
+      "ts": "2026-04-18T15:22:00-03:00",
+      "from": "Person:João Bogado",
+      "to": ["Person:Thomas Filshill"],
+      "subject": "Alia <> NGCash — Design Partner",
+      "body": "Thomas, tudo bom? Depois da call de quarta, time curtiu muito o que vocês estão fazendo com o Gold. Topamos entrar como design partner. Nossa proposta: $5k/mês, contrato de 6 meses, rev share de leads que vierem do nosso canal."
+    },
+    {
+      "ts": "2026-04-19T09:05:00-03:00",
+      "from": "Person:Thomas Filshill",
+      "to": ["Person:João Bogado"],
+      "subject": "Re: Alia <> NGCash — Design Partner",
+      "body": "João, que notícia boa! O apetite que vocês mostraram deixou o time aqui super animado. Sobre a proposta, $5k fica abaixo do que a gente vem ancorando com os outros design partners em conversa — o piso que estamos trabalhando é $6.5k. Consigo defender $6k se vocês topam fechar essa semana e entrar num ciclo de feedback de 2x por semana com Bernardo e comigo durante os primeiros 60 dias. Faz sentido?"
+    },
+    {
+      "ts": "2026-04-19T21:45:00-03:00",
+      "from": "Person:João Bogado",
+      "to": ["Person:Thomas Filshill"],
+      "subject": "Re: Alia <> NGCash — Design Partner",
+      "body": "Thomas, entendo. Deixa eu rodar internamente amanhã cedo. Se fechar em $6k, toparia o ritmo que você propôs. Volto até terça."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "bronze-slack-009",
+  "source": "slack",
+  "channel": "#alia-meetings",
+  "channel_id": "C0ALIAMEETINGS",
+  "thread_ts": "1776010000.000900",
+  "captured_at": "2026-04-18T11:22:00-03:00",
+  "messages": [
+    {
+      "ts": "2026-04-18T11:22:00-03:00",
+      "author": "Person:André Castro",
+      "text": "rodei 6 reuniões ontem com o bot. duas tiveram gap de ~2 min de transcrição no meio. você conseguem ver se é do lado do bot ou do Meet?"
+    },
+    {
+      "ts": "2026-04-18T11:45:00-03:00",
+      "author": "Person:Lucas Quaresma",
+      "text": "provavelmente reconnect do websocket. vou logar o intervalo entre chunks. mandei uns logs extras na branch do bot, rode de novo hoje à tarde e me avisa."
+    },
+    {
+      "ts": "2026-04-18T18:03:00-03:00",
+      "author": "Person:André Castro",
+      "text": "duas reuniões hoje, zero gap. deve ser confiável pra volume maior."
+    },
+    {
+      "ts": "2026-04-18T18:04:30-03:00",
+      "author": "Person:Thomas Filshill",
+      "text": "🎉 Lucas, quando isso escalar pra 20+ por dia vamos precisar de um dashboard mínimo de saúde do bot. não urgente."
+    }
+  ]
+}

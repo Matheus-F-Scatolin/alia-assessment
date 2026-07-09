@@ -1,0 +1,35 @@
+{
+  "id": "bronze-slack-004",
+  "source": "slack",
+  "channel": "#alia-infra",
+  "channel_id": "C0ALIAINFRA",
+  "thread_ts": "1776006120.000200",
+  "captured_at": "2026-04-19T16:02:00-03:00",
+  "messages": [
+    {
+      "ts": "2026-04-19T16:02:00-03:00",
+      "author": "Person:Lucas Quaresma",
+      "text": "vários agents estourando memória. tô vendo aliamit empurrando payloads muito maiores que o baseline. investigando."
+    },
+    {
+      "ts": "2026-04-19T17:11:22-03:00",
+      "author": "Person:Lucas Quaresma",
+      "text": "achei. pooling do httpx segurando responses em memória enquanto aliamit spawneia N chamadas paralelas. subindo fix."
+    },
+    {
+      "ts": "2026-04-19T23:48:45-03:00",
+      "author": "Person:Lucas Quaresma",
+      "text": "PR #287 mergeado. limites de pool + stream de response pra evitar carga inteira em memória. memória baseline há 30 min."
+    },
+    {
+      "ts": "2026-04-20T08:12:04-03:00",
+      "author": "Person:Bernardo Aires",
+      "text": "obrigadão Lucas. meus agentes também estavam sofrendo, rodando de novo agora."
+    },
+    {
+      "ts": "2026-04-20T08:14:00-03:00",
+      "author": "Person:Thomas Filshill",
+      "text": "Lucas, MVP. vale guardrail permanente num próximo ticket pra não depender de diagnóstico reativo."
+    }
+  ]
+}

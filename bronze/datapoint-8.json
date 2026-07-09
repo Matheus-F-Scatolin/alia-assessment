@@ -1,0 +1,40 @@
+{
+  "id": "bronze-meet-008",
+  "source": "google_meet",
+  "meeting_title": "Alia Advisors — Evidence Display & Alignment Panel",
+  "meeting_id": "meet-advisors-01",
+  "captured_at": "2026-04-20T19:30:00-03:00",
+  "participants": [
+    "Person:Thomas Filshill",
+    "Person:Mati Veloso",
+    "Person:Veronica Serra",
+    "Person:Lidia Mesquita"
+  ],
+  "transcript": [
+    {
+      "ts": "2026-04-20T19:32:44-03:00",
+      "speaker": "Person:Thomas Filshill",
+      "text": "problema aberto: quando Gold cita evidência vinda de entidade (ex: 'esse projeto tem esse dono'), e não de silver direto — como isso aparece no painel sem confundir o usuário?"
+    },
+    {
+      "ts": "2026-04-20T19:35:02-03:00",
+      "speaker": "Person:Lidia Mesquita",
+      "text": "clicável, abre um card lateral com a entidade. mas o chip tem que ser visualmente distinto — não é 'uma reunião aconteceu', é 'essa pessoa é dona deste projeto'."
+    },
+    {
+      "ts": "2026-04-20T19:38:20-03:00",
+      "speaker": "Person:Mati Veloso",
+      "text": "concordo. cor ou forma diferente. silver é 'evento', entidade é 'estado'."
+    },
+    {
+      "ts": "2026-04-20T19:42:15-03:00",
+      "speaker": "Person:Veronica Serra",
+      "text": "do lado comercial, o que vende o Gold é a profundidade da resposta. se a evidência de entidade some ou vira hover, perde. precisa ser inline e óbvio."
+    },
+    {
+      "ts": "2026-04-20T19:47:00-03:00",
+      "speaker": "Person:Thomas Filshill",
+      "text": "fechado. vou levar pro Bernardo: chip distinto por tipo de evidência, tudo clicável, card lateral pro detalhe. volto com mockup."
+    }
+  ]
+}

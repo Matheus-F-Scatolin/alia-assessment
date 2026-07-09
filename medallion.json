@@ -1,0 +1,221 @@
+{
+  "silver": [
+    {
+      "id": "silver-001",
+      "text": "PR 312 do Henrique adicionou 'Goal' e 'Objective' como novos labels do entity layer sem atualizar os parsers dos agentes downstream; parsing quebrou em produção quando agentes começaram a receber entidades com campos não mapeados.",
+      "project_ref": "Project:Entity Layer",
+      "entity_refs": ["Person:Henrique Silva", "Person:Bernardo Aires", "Project:Agent Runtime", "Project:Entity Layer"],
+      "bronze_refs": ["bronze-slack-001", "bronze-github-003"],
+      "occurred_at": "2026-04-19T10:41:00-03:00"
+    },
+    {
+      "id": "silver-002",
+      "text": "Thomas direcionou o handoff do Henrique para Bernardo e Lucas em conjunto, aproveitando a migração do Lucas para o core nesta semana.",
+      "project_ref": "Project:Entity Layer",
+      "entity_refs": ["Person:Thomas Filshill", "Person:Bernardo Aires", "Person:Lucas Quaresma", "Person:Henrique Silva", "Objective:Entity Layer Handoff Before 2026-04-24"],
+      "bronze_refs": ["bronze-slack-001"],
+      "occurred_at": "2026-04-19T11:03:44-03:00"
+    },
+    {
+      "id": "silver-003",
+      "text": "Henrique confirmou que esta é sua última semana e ofereceu disponibilidade para sync de handoff na segunda-feira; PR 312 foi seu último commit antes da saída.",
+      "project_ref": "Project:Entity Layer",
+      "entity_refs": ["Person:Henrique Silva"],
+      "bronze_refs": ["bronze-slack-001", "bronze-github-003"],
+      "occurred_at": "2026-04-19T10:52:08-03:00"
+    },
+    {
+      "id": "silver-004",
+      "text": "Bernardo e Lucas estão alinhados sobre silver/gold (coluna nulável no silver para retrocompatibilidade, inferência deferida ao gold) mas a decisão sobre entity layer foi adiada — virou urgente com a saída do Henrique.",
+      "project_ref": "Project:Gold Synthesis",
+      "entity_refs": ["Person:Bernardo Aires", "Person:Lucas Quaresma", "Project:Silver Layer", "Project:Gold Synthesis"],
+      "bronze_refs": ["bronze-meet-002"],
+      "occurred_at": "2026-04-20T12:05:10-03:00"
+    },
+    {
+      "id": "silver-005",
+      "text": "Gold verbose demonstrou capacidade de surfacear contexto não-solicitado: uma pergunta sobre alinhamento de entity layer devolveu automaticamente o fato da saída do Henrique e o risco de orfandade do entity layer.",
+      "project_ref": "Project:Gold Synthesis",
+      "entity_refs": ["Person:Bernardo Aires", "Person:Henrique Silva", "Project:Gold Synthesis"],
+      "bronze_refs": ["bronze-meet-002"],
+      "occurred_at": "2026-04-20T12:07:42-03:00"
+    },
+    {
+      "id": "silver-006",
+      "text": "NGCash formalizou proposta inicial de design partner: $5k/mês por 6 meses com rev share de leads do canal deles.",
+      "project_ref": "Project:NGCash Partnership",
+      "entity_refs": ["Person:João Bogado", "Project:NGCash Partnership"],
+      "bronze_refs": ["bronze-email-005"],
+      "occurred_at": "2026-04-18T15:22:00-03:00"
+    },
+    {
+      "id": "silver-007",
+      "text": "Thomas contra-propôs $6k/mês condicionando a fechamento nesta semana e a ciclo de feedback 2x/semana com Bernardo durante os primeiros 60 dias — ancorando pricing para os próximos design partners.",
+      "project_ref": "Project:NGCash Partnership",
+      "entity_refs": ["Person:Thomas Filshill", "Person:João Bogado", "Person:Bernardo Aires", "Objective:Close NGCash at $6k+"],
+      "bronze_refs": ["bronze-email-005"],
+      "occurred_at": "2026-04-19T09:05:00-03:00"
+    },
+    {
+      "id": "silver-008",
+      "text": "João Bogado aceitou rodar a contra-proposta internamente e se comprometeu a voltar até terça (2026-04-21); sinal é positivo mas não definitivo.",
+      "project_ref": "Project:NGCash Partnership",
+      "entity_refs": ["Person:João Bogado"],
+      "bronze_refs": ["bronze-email-005"],
+      "occurred_at": "2026-04-19T21:45:00-03:00"
+    },
+    {
+      "id": "silver-009",
+      "text": "Lucas diagnosticou e corrigiu o estouro de memória nos agentes via PR #287: pooling do httpx estava segurando responses enquanto Aliamit disparava chamadas paralelas; fix aplicou limites de pool e streaming de response.",
+      "project_ref": "Project:Agent Runtime",
+      "entity_refs": ["Person:Lucas Quaresma", "Project:Agent Runtime"],
+      "bronze_refs": ["bronze-slack-004"],
+      "occurred_at": "2026-04-19T23:48:45-03:00"
+    },
+    {
+      "id": "silver-010",
+      "text": "Thomas sinalizou que o fix é reativo e pediu follow-up para guardrail permanente de consumo de memória, sem urgência.",
+      "project_ref": "Project:Agent Runtime",
+      "entity_refs": ["Person:Thomas Filshill", "Person:Lucas Quaresma"],
+      "bronze_refs": ["bronze-slack-004"],
+      "occurred_at": "2026-04-20T08:14:00-03:00"
+    },
+    {
+      "id": "silver-011",
+      "text": "VTEX aceitou piloto conceitualmente; Anderson tem deadline de 2026-04-28 para trazer lista de datasets liberados — bloqueador de escopo para Bernardo poder preparar silvers específicos.",
+      "project_ref": "Project:VTEX Partnership",
+      "entity_refs": ["Person:Anderson Queiroz", "Person:Thomas Filshill", "Objective:VTEX Pilot Dataset Scope Locked"],
+      "bronze_refs": ["bronze-notion-006"],
+      "occurred_at": "2026-04-20T17:59:00-03:00"
+    },
+    {
+      "id": "silver-012",
+      "text": "VTEX impôs restrição de PII (nenhum dado de merchant pode sair da conta deles), o que levou à proposta de começar piloto por dados internos (eng/produto) antes de qualquer superfície comercial.",
+      "project_ref": "Project:VTEX Partnership",
+      "entity_refs": ["Person:Anderson Queiroz", "Project:VTEX Partnership"],
+      "bronze_refs": ["bronze-notion-006"],
+      "occurred_at": "2026-04-20T17:59:00-03:00"
+    },
+    {
+      "id": "silver-015",
+      "text": "Advisors (Mati, Lidia) convergiram: evidências vindas de entidades precisam ser visualmente distintas de evidências de silver — entidade representa 'estado', silver representa 'evento'. Proposta: chip de forma/cor diferente, clicável para card lateral.",
+      "project_ref": "Project:Gold Synthesis",
+      "entity_refs": ["Person:Lidia Mesquita", "Person:Mati Veloso", "Person:Thomas Filshill", "Objective:Evidence-from-Entities Dashboard Spec"],
+      "bronze_refs": ["bronze-meet-008"],
+      "occurred_at": "2026-04-20T19:35:02-03:00"
+    },
+    {
+      "id": "silver-016",
+      "text": "Veronica alertou que esconder evidências de entidade em hover/colapso enfraquece a proposta de valor comercial do Gold ('profundidade da resposta'); defendeu manter inline.",
+      "project_ref": "Project:Gold Synthesis",
+      "entity_refs": ["Person:Veronica Serra", "Project:Gold Synthesis"],
+      "bronze_refs": ["bronze-meet-008"],
+      "occurred_at": "2026-04-20T19:42:15-03:00"
+    },
+    {
+      "id": "silver-017",
+      "text": "André Castro reportou gap de ~2min em 2 de 6 transcrições; Lucas identificou reconnect de websocket e aplicou fix — 2 reuniões subsequentes rodaram sem gap.",
+      "project_ref": "Project:Alia Meetings",
+      "entity_refs": ["Person:André Castro", "Person:Lucas Quaresma", "Project:Alia Meetings"],
+      "bronze_refs": ["bronze-slack-009"],
+      "occurred_at": "2026-04-18T18:03:00-03:00"
+    },
+    {
+      "id": "silver-018",
+      "text": "Thomas sinalizou necessidade futura de dashboard mínimo de saúde do Meet bot antes de escalar para 20+ reuniões/dia; não-urgente hoje.",
+      "project_ref": "Project:Alia Meetings",
+      "entity_refs": ["Person:Thomas Filshill", "Person:Lucas Quaresma", "Goal:Meetings at Production Scale"],
+      "bronze_refs": ["bronze-slack-009"],
+      "occurred_at": "2026-04-18T18:04:30-03:00"
+    },
+    {
+      "id": "silver-019",
+      "text": "Ariane do Itaú confirmou que fará intro de Valeria e Tatyana para demo do Gold na primeira semana de maio — terceira perna da meta de design partners.",
+      "project_ref": "Project:Itaú Relationship",
+      "entity_refs": ["Person:Ariane Gomes-Santos", "Person:Thomas Filshill", "Goal:Three Paid Design Partners by June"],
+      "bronze_refs": ["bronze-slack-010"],
+      "occurred_at": "2026-04-15T14:10:00-03:00"
+    },
+    {
+      "id": "silver-020",
+      "text": "Thomas condicionou o calendário da demo Itaú a ter Gold rodando em caso real (não apenas demo); Bernardo se comprometeu com caso do Henrique funcional até segunda-feira.",
+      "project_ref": "Project:Gold Synthesis",
+      "entity_refs": ["Person:Thomas Filshill", "Person:Bernardo Aires", "Objective:Gold Live for Functional & Core — 2026-04-21"],
+      "bronze_refs": ["bronze-slack-010"],
+      "occurred_at": "2026-04-15T14:14:00-03:00"
+    },
+    {
+      "id": "silver-021",
+      "text": "Bernardo levantou edge case para o Gold sistemático: dois 'Lucas' no mesmo projeto produziriam resolução ambígua — descartado como problema também do time humano, não apenas do sistema.",
+      "project_ref": "Project:Gold Synthesis",
+      "entity_refs": ["Person:Bernardo Aires", "Person:Thomas Filshill"],
+      "bronze_refs": ["bronze-meet-002"],
+      "occurred_at": "2026-04-20T12:30:12-03:00"
+    },
+    {
+      "id": "silver-022",
+      "text": "Latência observada do Gold verbose: 3–4 minutos na primeira chamada (varia com profundidade da pergunta); cache server-side reduz chamadas subsequentes.",
+      "project_ref": "Project:Gold Synthesis",
+      "entity_refs": ["Person:Bernardo Aires", "Project:Gold Synthesis"],
+      "bronze_refs": ["bronze-meet-002"],
+      "occurred_at": "2026-04-20T12:10:07-03:00"
+    }
+  ],
+
+  "gold": [
+    {
+      "id": "gold-001",
+      "topic_key": "handoff-henrique",
+      "title": "Saída do Henrique e risco no entity layer",
+      "narrative": "Henrique sai em 2026-04-24. Antes de sair, mergeou o PR 312 adicionando Goal e Objective ao entity layer sem integrar os parsers dos agentes downstream — os agentes de Bernardo quebraram em produção no dia 19. Thomas direcionou o handoff para Bernardo e Lucas em conjunto, aproveitando a migração do Lucas para o core. Sync de documentação planejada para segunda-feira da última semana do Henrique. Se o sync não acontecer, o entity layer fica órfão com mudanças não documentadas em prod.",
+      "entity_refs": ["Person:Henrique Silva", "Person:Bernardo Aires", "Person:Lucas Quaresma", "Person:Thomas Filshill", "Project:Entity Layer", "Objective:Entity Layer Handoff Before 2026-04-24"],
+      "silver_refs": ["silver-001", "silver-002", "silver-003"],
+      "updated_at": "2026-04-21T08:00:00-03:00"
+    },
+    {
+      "id": "gold-002",
+      "topic_key": "medallion-alignment",
+      "title": "Alinhamento Bernardo × Lucas sobre as camadas do medallion",
+      "narrative": "Em silver e gold, Bernardo e Lucas já estão alinhados: coluna nulável no silver para retrocompatibilidade, inferência de subcategorias deferida ao gold. Sobre entity layer, a decisão foi adiada e virou urgente com a saída do Henrique — ver gold-001. Não há desalinhamento de fato entre os dois; há uma sync não marcada que o handoff vai forçar. A demonstração do Gold verbose mostrou que a pergunta sobre esse alinhamento puxa sozinha o contexto da saída do Henrique, validando a proposta do produto.",
+      "entity_refs": ["Person:Bernardo Aires", "Person:Lucas Quaresma", "Person:Henrique Silva", "Project:Silver Layer", "Project:Gold Synthesis", "Project:Entity Layer"],
+      "silver_refs": ["silver-004", "silver-002", "silver-005"],
+      "updated_at": "2026-04-21T08:00:00-03:00"
+    },
+    {
+      "id": "gold-003",
+      "topic_key": "gold-production-launch",
+      "title": "Gold em produção hoje",
+      "narrative": "Gold (verbose para CEO + sistemático para dashboard) entra em produção hoje para pilotos funcional e core. Demo validou profundidade do verbose, incluindo capacidade de surfacear contexto não-perguntado (caso do Henrique). Latência de 3–4 min na primeira chamada é aceitável enquanto o cache cobre subsequentes. Duas questões abertas: (1) como evidências vindas de entidades aparecem no dashboard — advisors convergiram em chip visualmente distinto e clicável, mantido inline; (2) ambiguidade de nomes (dois 'Lucas' no mesmo projeto) é problema compartilhado com o time humano e ficou como 'aceitar por enquanto'.",
+      "entity_refs": ["Person:Bernardo Aires", "Person:Thomas Filshill", "Person:Lidia Mesquita", "Person:Mati Veloso", "Person:Veronica Serra", "Project:Gold Synthesis", "Goal:Ship Gold to Pilots — Q2", "Objective:Gold Live for Functional & Core — 2026-04-21", "Objective:Evidence-from-Entities Dashboard Spec"],
+      "silver_refs": ["silver-005", "silver-015", "silver-016", "silver-021", "silver-022", "silver-020"],
+      "updated_at": "2026-04-21T08:00:00-03:00"
+    },
+    {
+      "id": "gold-004",
+      "topic_key": "design-partners-pipeline",
+      "title": "Pipeline de design partners — NGCash, VTEX, Itaú",
+      "narrative": "Meta de três design partners pagos até junho tem as três posições identificadas. NGCash abriu em $5k; Thomas contra-propôs $6k com condições de closing nesta semana e feedback 2x/semana com Bernardo. João Bogado aceitou rodar internamente e volta até terça. VTEX aceitou piloto conceitualmente mas está bloqueada em escopo — Anderson deve voltar com lista de datasets até 2026-04-28, com restrição forte de PII limitando superfície inicial a dados internos. Itaú tem intro agendada para Valeria e Tatyana na primeira semana de maio, condicionada a Gold rodar em caso real — dependência direta do ship de hoje.",
+      "entity_refs": ["Person:Thomas Filshill", "Person:João Bogado", "Person:Anderson Queiroz", "Person:Ariane Gomes-Santos", "Person:Bernardo Aires", "Project:NGCash Partnership", "Project:VTEX Partnership", "Project:Itaú Relationship", "Goal:Three Paid Design Partners by June", "Objective:Close NGCash at $6k+", "Objective:VTEX Pilot Dataset Scope Locked"],
+      "silver_refs": ["silver-006", "silver-007", "silver-008", "silver-011", "silver-012", "silver-019", "silver-020"],
+      "updated_at": "2026-04-21T08:00:00-03:00"
+    },
+    {
+      "id": "gold-005",
+      "topic_key": "agent-infra-stability",
+      "title": "Estabilidade de infra pós-Aliamit",
+      "narrative": "Estouro de memória nos agentes foi causado por pooling do httpx segurando responses enquanto Aliamit disparava chamadas paralelas. Lucas diagnosticou e mergeou PR #287 com limites de pool e streaming de response; memória voltou ao baseline em 30min e agents do Bernardo voltaram a rodar. Thomas pediu follow-up para guardrail permanente, sinalizando que o fix é reativo — sem urgência, mas explícito no backlog.",
+      "entity_refs": ["Person:Lucas Quaresma", "Person:Bernardo Aires", "Person:Thomas Filshill", "Project:Agent Runtime"],
+      "silver_refs": ["silver-009", "silver-010"],
+      "updated_at": "2026-04-21T08:00:00-03:00"
+    },
+    {
+      "id": "gold-006",
+      "topic_key": "alia-meetings-pilot",
+      "title": "Alia Meetings em piloto",
+      "narrative": "Bot do Google Meet estável após fix de reconnect de websocket — André reportou 2 reuniões sem gap após patch. Volume atual: 4–8 reuniões/dia. Thomas sinalizou que antes de escalar para 20+/dia vai precisar de dashboard mínimo de saúde do bot, mas não é urgente. Lucas continua como primário apesar da migração para core, com sobreposição natural pelo handoff do entity layer.",
+      "entity_refs": ["Person:Lucas Quaresma", "Person:André Castro", "Person:Thomas Filshill", "Project:Alia Meetings", "Goal:Meetings at Production Scale"],
+      "silver_refs": ["silver-017", "silver-018"],
+      "updated_at": "2026-04-21T08:00:00-03:00"
+    }
+  ]
+}

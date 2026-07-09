@@ -1,0 +1,45 @@
+{
+  "id": "bronze-slack-001",
+  "source": "slack",
+  "channel": "#alia-eng",
+  "channel_id": "C0ALIAENG",
+  "thread_ts": "1776038460.000100",
+  "captured_at": "2026-04-19T10:41:00-03:00",
+  "messages": [
+    {
+      "ts": "2026-04-19T10:41:00-03:00",
+      "author": "Person:Bernardo Aires",
+      "text": "galera, parsing dos meus agentes tá quebrado. tô recebendo entities com campo `goals` e `okrs` que não tão mapeados. alguém mexeu no entity layer?"
+    },
+    {
+      "ts": "2026-04-19T10:44:12-03:00",
+      "author": "Person:Henrique Silva",
+      "text": "eu mergeei o PR 312 na sexta. adicionei goals e OKRs como entidades novas. não rodei integração com os agentes downstream, desculpa."
+    },
+    {
+      "ts": "2026-04-19T10:45:30-03:00",
+      "author": "Person:Bernardo Aires",
+      "text": "tá de boa, mas preciso que você sente comigo pra documentar isso antes de sair. meus agentes tão em prod com parsing quebrado agora."
+    },
+    {
+      "ts": "2026-04-19T10:52:08-03:00",
+      "author": "Person:Henrique Silva",
+      "text": "posso segunda de manhã. minha última semana é essa."
+    },
+    {
+      "ts": "2026-04-19T11:03:44-03:00",
+      "author": "Person:Thomas Filshill",
+      "text": "B, chama Lucas também. handoff do Henrique vai pros dois — Lucas tá vindo pro core agora."
+    },
+    {
+      "ts": "2026-04-19T11:04:55-03:00",
+      "author": "Person:Bernardo Aires",
+      "text": "fechado. Lucas, tu topa?"
+    },
+    {
+      "ts": "2026-04-19T11:18:21-03:00",
+      "author": "Person:Lucas Quaresma",
+      "text": "topo. me passa o contexto do entity layer antes da call."
+    }
+  ]
+}

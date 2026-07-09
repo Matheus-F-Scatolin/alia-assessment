@@ -1,0 +1,29 @@
+{
+  "id": "bronze-github-003",
+  "source": "github",
+  "event_type": "pull_request",
+  "repo": "Prosieve-Inc/alia-medallion",
+  "pr_number": 312,
+  "pr_title": "feat(entity-layer): introduce Goal and Objective nodes",
+  "captured_at": "2026-04-17T18:05:12-03:00",
+  "author": "Person:Henrique Silva",
+  "merged_by": "Person:Henrique Silva",
+  "merged_at": "2026-04-17T18:05:12-03:00",
+  "base": "main",
+  "head": "henrique/entity-goals-okrs",
+  "body": "Adds two new entity labels to the medallion KG: `Goal` and `Objective`. Writer (Neo4jKnowledgeGraphWriter) and the update schemas are extended to emit them. Navigator reads are already label-agnostic.\n\nDoes **not** update downstream consumers in `alia_medallion.infra.agents.*` — those still assume the old Person/Project-only entity shape. Will need a follow-up.\n\nLast commit before I hand off — sorry about the rush. I'll be available on Slack this week for questions.",
+  "files_changed": [
+    "src/alia_medallion/infra/neo4j/writer.py",
+    "src/alia_medallion/infra/agents/knowledge_graph/schemas.py",
+    "src/alia_medallion/infra/agents/knowledge_graph/update_schemas.py",
+    "tests/consumer/test_knowledge_graph_writer.py"
+  ],
+  "reviews": [
+    {
+      "reviewer": "Person:Henrique Silva",
+      "state": "self-approved",
+      "note": "Shipping before I leave — follow-up for agent integration."
+    }
+  ],
+  "linked_issues": []
+}

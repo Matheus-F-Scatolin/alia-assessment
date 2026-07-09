@@ -1,0 +1,96 @@
+# ==========================================
+# Operating System Files
+# ==========================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.lnk
+*.cab
+
+# ==========================================
+# IDEs and Editors
+# ==========================================
+# Visual Studio Code
+.vscode/
+!.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ / WebStorm / PyCharm
+.idea/
+*.iws
+*.iml
+
+# Vim / Emacs
+*~
+*.swp
+*.swo
+.project
+.classpath
+
+# ==========================================
+# Environments & Sensitive Data (NEVER COMMIT)
+# ==========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.cert
+*.pwd
+
+# ==========================================
+# Node.js / JavaScript
+# ==========================================
+node_modules/
+/jspm_packages/
+.npm
+.eslintcache
+.stylelintcache
+.next/
+.nuxt/
+dist/
+build/
+
+# ==========================================
+# Python
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env/
+.venv/
+ENV/
+htmlcov/
+.tox/
+.pytest_cache/
+
+# ==========================================
+# Logs and Databases
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.sqlite
+*.db
+
+# ==========================================
+# Local Packages / Terform / Miscellaneous
+# ==========================================
+.terraform/
+*.tfstate
+*.tfstate.backup

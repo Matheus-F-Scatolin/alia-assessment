@@ -1,0 +1,30 @@
+{
+  "id": "bronze-slack-010",
+  "source": "slack",
+  "channel": "#alia-commercial",
+  "channel_id": "C0ALIACOMM",
+  "thread_ts": "1776150000.001000",
+  "captured_at": "2026-04-15T14:10:00-03:00",
+  "messages": [
+    {
+      "ts": "2026-04-15T14:10:00-03:00",
+      "author": "Person:Thomas Filshill",
+      "text": "pessoal, Ariane do Itaú me respondeu. ela topa fazer intro da Valeria e da Tatyana pra gente apresentar o Gold depois que subir em produção. janela: primeira semana de maio."
+    },
+    {
+      "ts": "2026-04-15T14:12:20-03:00",
+      "author": "Person:Livia Kuga",
+      "text": "importante. Itaú é a terceira perna da meta de design partners. NGCash e VTEX são as outras duas."
+    },
+    {
+      "ts": "2026-04-15T14:14:00-03:00",
+      "author": "Person:Thomas Filshill",
+      "text": "exato. até a call, quero ter Gold rodando num caso real pra mostrar — não só demo. Bernardo, isso pressiona o ship-today."
+    },
+    {
+      "ts": "2026-04-15T14:16:12-03:00",
+      "author": "Person:Bernardo Aires",
+      "text": "entendido. meu target é ter o caso do Henrique como demo funcional até segunda."
+    }
+  ]
+}
