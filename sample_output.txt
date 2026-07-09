@@ -1,0 +1,224 @@
+================================================================
+$ python answer.py "Bernardo e Lucas estão alinhados sobre as camadas do medallion?"
+================================================================
+## Sim, na camada silver/gold estão alinhados — o ponto de atrito real é o entity layer
+
+Bernardo Aires (Engineer — Agents & Gold) e Lucas Quaresma (Engineer — Core, migrando para o core essa semana) **já chegaram a um alinhamento concreto sobre silver e gold**: usar uma coluna nulável no silver para manter retrocompatibilidade, e deferir a inferência de subcategorias para a camada gold [gold-002][silver-004]. Essa decisão apareceu na própria demonstração do Gold verbose, quando Bernardo rodou a pergunta que você fez agora e o sistema trouxe sozinho essa discussão de silver/gold, a opção da coluna nulável e a inferência deferida — evidência primária no sync gravado entre Thomas e Bernardo [bronze-meet-002].
+
+Onde **não** há alinhamento fechado ainda é no **entity layer**: essa decisão foi adiada e não há, segundo a narrativa gold, "desalinhamento de fato" entre os dois — existe uma "sync não marcada" que ainda precisa acontecer [gold-002][silver-004].
+
+## Contexto adjacente que você não perguntou, mas é relevante
+
+Essa lacuna no entity layer deixou de ser um detalhe adiável porque **Henrique Silva está saindo da empresa em 2026-04-24** [gold-001]. Antes de sair, Henrique mergeou o PR 312 adicionando Goal e Objective ao entity layer **sem integrar os parsers dos agentes downstream**, o que quebrou os agentes de Bernardo em produção no dia 19 [gold-001][silver-002]. Por isso, Thomas Filshill (liderança) direcionou o handoff do entity layer para Bernardo **e** Lucas em conjunto, aproveitando justamente a migração do Lucas para o core essa semana [silver-002], com base em uma decisão registrada em Slack [gold-001].
+
+Há uma sync de documentação planejada para a segunda-feira da última semana do Henrique — mas o próprio gold-001 aponta o risco: **se esse sync não acontecer, o entity layer fica órfão**, com mudanças em produção não documentadas [gold-001]. Curiosamente, essa é exatamente a dinâmica que a demonstração do Gold verbose capturou ao vivo: ao perguntar sobre alinhamento no entity layer, o sistema trouxe automaticamente o fato da saída do Henrique e esse risco de orfandade, sem que ninguém tivesse perguntado diretamente sobre isso [silver-005][bronze-meet-002] — o que é citado no próprio dado como validação da proposta do produto.
+
+**Resumo prático:** Bernardo e Lucas estão de fato alinhados em silver/gold. O entity layer é o ponto pendente, e ele carrega um risco real e com prazo (a saída do Henrique em 24/04) que merece prioridade sobre o alinhamento "cosmético" das camadas já resolvidas.
+---
+Lineage consultado:
+  gold: gold-001, gold-002
+  silver: silver-002, silver-004, silver-005
+  bronze: bronze-meet-002
+
+[trace das tool calls]
+  → search_entities({"query": "Bernardo"})
+  → search_entities({"query": "Lucas"})
+  → search_golds({"query": "medallion camadas"})
+  → get_gold({"gold_id": "gold-002"})
+  → get_entity({"ref": "Person:Bernardo Aires"})
+  → get_entity({"ref": "Person:Lucas Quaresma"})
+  → get_silvers({"silver_ids": ["silver-004", "silver-002", "silver-005"]})
+  → search_golds({"query": "Henrique saída handoff"})
+  → get_gold({"gold_id": "gold-001"})
+  → get_bronze({"bronze_id": "bronze-meet-002"})
+
+================================================================
+$ python answer.py "Por que os agentes do Bernardo quebraram?"
+================================================================
+Os agentes do Bernardo quebraram por um estouro de memória causado por um problema de infraestrutura no runtime de agentes, não por um bug no código dele especificamente [gold-005].
+
+**A causa raiz:** o Aliamit (componente/integração que dispara múltiplas chamadas em paralelo) estava enviando payloads muito maiores que o baseline. O connection pooling do `httpx` estava segurando as responses inteiras em memória enquanto o Aliamit disparava N chamadas paralelas — isso acumulava memória até estourar [silver-009], [bronze-slack-004].
+
+**Quem resolveu:** Lucas Quaresma (Engineer, colaborador próximo de Bernardo em Agent Runtime e Gold Synthesis) diagnosticou o problema em cerca de uma hora e mergeou o PR #287, que aplicou limites no pool de conexões e passou a fazer streaming das responses em vez de carregar tudo em memória de uma vez. A memória voltou ao baseline em ~30 minutos, e Bernardo confirmou no Slack que seus agentes voltaram a rodar normalmente ("meus agentes também estavam sofrendo, rodando de novo agora") [silver-009], [bronze-slack-004].
+
+**Contexto adicional relevante (não perguntado, mas importante):** Thomas Filshill sinalizou que esse fix foi reativo — ou seja, resolveu o incidente, mas não previne recorrência. Ele pediu um follow-up para criar um guardrail permanente de consumo de memória, sem urgência, mas deixando isso explícito no backlog [silver-010], [bronze-slack-004]. Isso significa que, se o Aliamit continuar escalando o volume de chamadas paralelas, o mesmo tipo de estouro pode se repetir até que esse guardrail seja implementado — vale acompanhar se esse ticket foi aberto/priorizado.
+
+Também vale notar que Bernardo está com múltiplas frentes acumuladas: além de Agent Runtime e Gold Synthesis, ele está assumindo co-ownership do Entity Layer e da estabilização de escrita no Neo4j pós-saída de Henrique Silva [Person:Bernardo Aires, get_entity]. Isso não tem relação direta com essa quebra específica, mas é um fator de carga sobre a pessoa que "sofreu" o incidente.
+---
+Lineage consultado:
+  gold: gold-005
+  silver: silver-009, silver-010
+  bronze: bronze-slack-004
+
+[trace das tool calls]
+  → search_entities({"query": "Bernardo"})
+  → search_golds({"query": "agentes quebraram"})
+  → get_gold({"gold_id": "gold-005"})
+  → get_entity({"ref": "Person:Bernardo Aires"})
+  → get_silvers({"silver_ids": ["silver-009", "silver-010"]})
+  → get_bronze({"bronze_id": "bronze-slack-004"})
+
+================================================================
+$ python answer.py "O que muda com a saída do Henrique?"
+================================================================
+## O que muda com a saída do Henrique
+
+Henrique Silva, engenheiro que construiu o entity layer e a extensão mais recente de goals/OKRs, está saindo da empresa em **2026-04-24** para uma startup que adquiriu o conceito CCC [Person:Henrique Silva]. Ele era o **dono único (sole owner)** do Entity Layer até o handoff [gold-001].
+
+**O que já quebrou:** No dia 17/04, Henrique mergeou o PR #312, introduzindo os labels `Goal` e `Objective` no knowledge graph — mas sem atualizar os parsers dos agentes downstream que ainda assumiam o formato antigo (só Person/Project) [bronze-github-003], [silver-001]. Isso quebrou em produção no dia 19: os agentes de Bernardo Aires começaram a receber entidades com campos `goals`/`okrs` não mapeados [bronze-slack-001], [silver-001].
+
+**Como o handoff está sendo resolvido:** Thomas Filshill decidiu direcionar o handoff do entity layer para **Bernardo Aires e Lucas Quaresma em conjunto**, aproveitando que Lucas está migrando para o core nesta mesma semana [silver-002], [bronze-slack-001]. Henrique se ofereceu para uma sync de documentação na segunda-feira da sua última semana [silver-003] — esse é o objetivo formal registrado: "Henrique documents goals/OKRs contract; Bernardo and Lucas take co-ownership before departure", com deadline 2026-04-24 [Objective:Entity Layer Handoff Before 2026-04-24].
+
+Concretamente, na estrutura organizacional isso já gerou um novo projeto — **Knowledge Graph Production** — migrando a geração do KG do protótipo do Henrique para a ownership de Bernardo/Lucas, estabilizando as escritas no neo4j [Project:Knowledge Graph Production]. E existe um goal explícito criado por causa dessa saída: **"Stabilize Medallion Ownership Post-Henrique"**, com o objetivo de que nenhuma pessoa seja ponto único de falha para entity layer, silver ou gold até o final de abril [Goal:Stabilize Medallion Ownership Post-Henrique].
+
+## Risco não perguntado, mas relevante
+
+Se a sync de documentação de segunda-feira não acontecer antes da saída de Henrique no dia 24/04, **o entity layer fica órfão**, com mudanças em produção (o PR 312) não documentadas e sem dono claro [gold-001]. Esse é hoje classificado como "o maior risco de ownership" no goal de estabilização pós-Henrique [Goal:Stabilize Medallion Ownership Post-Henrique]. Vale notar também que o Knowledge Graph Production já depende explicitamente do schema do entity layer [Project:Knowledge Graph Production → Project:Entity Layer], então qualquer instabilidade no handoff se propaga diretamente para esse projeto de produção também.
+
+Por fim, cabe registrar que essa mesma situação apareceu como caso de validação do próprio produto: uma pergunta sobre alinhamento de camadas do medallion entre Bernardo e Lucas trouxe automaticamente à tona o contexto da saída do Henrique e o risco de orfandade do entity layer [silver-005], [gold-002] — exatamente o tipo de contexto adjacente que esta resposta também está trazendo agora.
+---
+Lineage consultado:
+  gold: gold-001, gold-002
+  silver: silver-001, silver-002, silver-003, silver-004, silver-005
+  bronze: bronze-github-003, bronze-slack-001
+
+[trace das tool calls]
+  → search_entities({"query": "Henrique"})
+  → get_entity({"ref": "Person:Henrique Silva"})
+  → get_entity({"ref": "Project:Knowledge Graph Production"})
+  → get_entity({"ref": "Goal:Stabilize Medallion Ownership Post-Henrique"})
+  → get_entity({"ref": "Objective:Entity Layer Handoff Before 2026-04-24"})
+  → search_golds({"query": "Henrique handoff"})
+  → get_gold({"gold_id": "gold-001"})
+  → get_gold({"gold_id": "gold-002"})
+  → get_silvers({"silver_ids": ["silver-001", "silver-002", "silver-003", "silver-004", "silver-005"]})
+  → get_bronze({"bronze_id": "bronze-slack-001"})
+  → get_bronze({"bronze_id": "bronze-github-003"})
+
+================================================================
+$ python answer.py "Onde está a negociação com o NGCash?"
+================================================================
+## Onde está a negociação com o NGCash
+
+A negociação com o NGCash está em fase de contraproposta, aguardando resposta interna do cliente. Aqui está a linha do tempo, direto da troca de emails entre **Thomas Filshill** (CEO/Founder) e **João Bogado** (NGCash — Product Lead) [bronze-email-005]:
+
+1. **18/04 — proposta inicial do NGCash**: João Bogado formalizou proposta de $5k/mês por 6 meses, com rev share sobre leads vindos do canal deles [silver-006].
+2. **19/04 — contraproposta de Thomas**: Thomas recusou o valor (abaixo do piso que estão ancorando com outros design partners, que é $6,5k) e contrapropôs **$6k/mês**, condicionando o fechamento a acontecer *nesta semana* e a um ciclo de feedback de 2x por semana com **Bernardo Aires** durante os primeiros 60 dias [silver-007].
+3. **19/04, à noite — resposta de João**: ele aceitou rodar a contraproposta internamente e se comprometeu a voltar com posição até **terça-feira (21/04)**. O sinal é positivo, mas ainda não é um "sim" definitivo [silver-008].
+
+Ou seja: a bola está do lado do NGCash, com prazo dado para amanhã (terça). Não há confirmação de fechamento registrada nos dados até o momento.
+
+Isso está amarrado a um objetivo explícito no knowledge graph — **"Close NGCash at $6k+"**, com meta de assinar até o fim desta semana no mínimo $6k/mês [get_entity Objective:Close NGCash at $6k+] — e ao goal maior de **três design partners pagos até junho**, do qual NGCash é a primeira posição nomeada, junto com VTEX e Itaú [gold-004].
+
+### Contexto adjacente relevante
+- **Pricing como precedente**: Thomas está explicitamente usando o NGCash para "ancorar" o preço dos próximos design partners ($6–6,5k como piso) [silver-007] — ou seja, essa negociação não é isolada, ela define o patamar comercial que será usado com VTEX e Itaú também [gold-004].
+- **Compromisso operacional pós-fechamento**: **Livia Kuga** já está no projeto como responsável pelo onboarding operacional assim que o contrato for assinado [get_entity Project:NGCash Partnership] — então, se João confirmar na terça, o próximo passo (onboarding) já tem dona definida.
+- **Carga de Bernardo Aires**: a condição de fechamento inclui Bernardo entrando num ciclo de feedback 2x/semana por 60 dias com o NGCash [silver-007] — vale considerar isso como um compromisso de tempo dele que ainda não apareceu formalizado em nenhum goal/objective específico do Bernardo nos dados que tenho.
+
+Não encontrei, nos dados disponíveis, confirmação de que a resposta de terça (21/04) já chegou — se você quiser, posso verificar se há um bronze/silver mais recente cobrindo esse desfecho.
+---
+Lineage consultado:
+  gold: gold-004
+  silver: silver-006, silver-007, silver-008
+  bronze: bronze-email-005
+
+[trace das tool calls]
+  → search_entities({"query": "NGCash"})
+  → search_golds({"query": "NGCash"})
+  → get_gold({"gold_id": "gold-004"})
+  → get_entity({"ref": "Project:NGCash Partnership"})
+  → get_entity({"ref": "Objective:Close NGCash at $6k+"})
+  → get_silvers({"silver_ids": ["silver-006", "silver-007", "silver-008"]})
+  → get_entity({"ref": "Person:João Bogado"})
+  → get_entity({"ref": "Person:Thomas Filshill"})
+  → get_bronze({"bronze_id": "bronze-email-005"})
+
+================================================================
+$ python answer.py "Qual é a situação do LinkedIn Outreach?"
+================================================================
+## Situação do LinkedIn Outreach
+
+O LinkedIn Outreach é uma ferramenta interna de outreach + sequenciamento construída por **Lucas Quaresma (Engenheiro — Core, em transição)**, que substituiu as ferramentas terceirizadas Lambdlist e AppFly, gerando uma economia de US$600–700/mês [Project:LinkedIn Outreach]. O projeto está ativo desde 2025-12-01 e Lucas é seu único autor/dono ("sole author") [Project:LinkedIn Outreach].
+
+É importante notar que **não há nenhuma narrativa gold ou interpretação silver dedicada a este projeto** — ele não aparece com gold_ids ou silver_ids próprios no knowledge graph. Isso significa que, diferente de outros projetos de Lucas (Entity Layer, Alia Meetings, Agent Runtime), o LinkedIn Outreach não tem cobertura de lineage documentada sobre seu status atual, bugs, roadmap ou adoção — os dados disponíveis são apenas a descrição estrutural do projeto em si.
+
+### Contexto adjacente relevante (risco não perguntado, mas importante)
+
+Ao olhar as arestas de Lucas no grafo, aparece um ponto que merece atenção: Lucas está **migrando para trabalho de core** esta semana, assumindo co-ownership do Entity Layer no handoff pós-saída de Henrique Silva [gold-001, silver-002, bronze-slack-001]. Ele já acumula papéis em quatro projetos simultâneos — Entity Layer, Alia Meetings, Knowledge Graph Production e LinkedIn Outreach [Person:Lucas Quaresma] — e é citado em outra frente como quem corrigiu um bug crítico de memória no Agent Runtime (PR #287) [silver-009] e um gap de websocket no Alia Meetings [silver-017].
+
+Como Lucas é o **único dono** do LinkedIn Outreach e está sendo redirecionado prioritariamente para o core (entity layer), há um risco real de o projeto ficar sem manutenção ativa ou sem documentação — o mesmo padrão de risco que já se materializou com a saída de Henrique Silva, cujo handoff incompleto quebrou os agentes de Bernardo Aires em produção [gold-001, bronze-slack-001]. Não há, nos dados disponíveis, nenhum plano de sucessão ou segundo mantenedor definido para o LinkedIn Outreach.
+
+**O que falta nos dados:** não há golds/silvers/bronzes específicos sobre uso atual, métricas de adoção, bugs abertos ou roadmap do LinkedIn Outreach além da descrição estrutural do projeto — se precisar de detalhes operacionais mais recentes, seria necessário uma fonte primária (Slack/Notion) que ainda não está catalogada no lineage.
+---
+Lineage consultado:
+  gold: gold-001
+  silver: silver-002, silver-004, silver-009, silver-010, silver-017, silver-018
+  bronze: bronze-slack-001
+
+[trace das tool calls]
+  → search_entities({"query": "LinkedIn Outreach"})
+  → search_golds({"query": "LinkedIn Outreach"})
+  → get_entity({"ref": "Project:LinkedIn Outreach"})
+  → get_entity({"ref": "Person:Lucas Quaresma"})
+  → search_golds({"query": "outreach"})
+  → search_golds({"query": "sequencing"})
+  → search_golds({"query": "Lucas"})
+  → get_silvers({"silver_ids": ["silver-002", "silver-004", "silver-009", "silver-010", "silver-017", "silver-018"]})
+  → get_gold({"gold_id": "gold-001"})
+  → get_bronze({"bronze_id": "bronze-slack-001"})
+
+================================================================
+$ python answer.py "Quais são os maiores riscos da empresa esta semana?"
+================================================================
+Com base no lineage completo (golds → silvers → bronzes) e no knowledge graph, os maiores riscos da empresa nesta semana se concentram em três frentes: **ownership do entity layer**, **bloqueio de escopo no VTEX** e **dependência em cascata sobre o ship do Gold**. Vou detalhar cada um.
+
+## 1. Risco de maior severidade: entity layer órfão pela saída do Henrique
+
+Henrique Silva (Engenheiro — Entity Layer, saindo em 2026-04-24) é hoje o único owner do entity layer [gold-001]. Antes de sair, ele mergeou o PR 312 adicionando os nós `Goal` e `Objective` ao schema, mas **sem atualizar os parsers dos agentes downstream** — e os agentes de produção de Bernardo Aires quebraram em 19/04 [silver-001, bronze-github-003, bronze-slack-001]. Esse mesmo commit foi o último dele antes da saída [silver-003].
+
+Thomas Filshill direcionou o handoff para Bernardo Aires e Lucas Quaresma em conjunto, aproveitando a migração do Lucas para o core nesta mesma semana [silver-002]. Há uma sincronia de documentação planejada para segunda-feira da última semana do Henrique — **se esse sync não acontecer, o entity layer fica órfão, com mudanças não documentadas em produção** [gold-001].
+
+O knowledge graph reforça a gravidade: o projeto Entity Layer está diretamente ligado ao Goal "Stabilize Medallion Ownership Post-Henrique", cuja descrição é explícita — "nenhuma pessoa deve ser ponto único de falha no entity layer, silver ou gold até o fim de abril" — e a aresta descreve o entity layer como **"o maior risco de ownership isolado"** da empresa [Goal:Stabilize Medallion Ownership Post-Henrique]. Além disso, tanto o Gold Synthesis quanto o Agent Runtime e o Knowledge Graph Production dependem estruturalmente desse schema [Project:Entity Layer] — ou seja, uma quebra aqui se propaga para múltiplos sistemas, não fica isolada.
+
+## 2. VTEX bloqueado por escopo e restrição de PII
+
+O piloto VTEX foi aceito conceitualmente, mas está travado: Anderson Queiroz precisa devolver a lista de datasets liberados até 2026-04-28, e essa lista é bloqueadora para Bernardo poder preparar os silvers específicos do piloto [silver-011]. Some a isso uma restrição forte imposta pela VTEX — nenhum dado de merchant pode saltar da conta deles —, o que forçou a proposta de começar o piloto apenas com dados internos (eng/produto) antes de qualquer superfície comercial [silver-012]. É um risco de timeline mais do que técnico, mas compromete uma das três posições da meta "Three Paid Design Partners by June" [gold-004].
+
+## 3. Dependência em cascata: Itaú condicionado ao ship do Gold de hoje
+
+A demo do Itaú com Valeria e Tatyana, agendada para a primeira semana de maio, foi **condicionada por Thomas a ter o Gold rodando em caso real**, não apenas em demo [silver-020, silver-019]. Isso cria uma dependência direta entre o sucesso do ship de hoje (gold-003) e a terceira perna da meta de design partners — se o Gold não estabilizar a tempo, a intro do Itaú fica em risco.
+
+## Riscos secundários (menor severidade, vale monitorar)
+
+- **NGCash**: Thomas contra-propôs $6k/mês condicionando o fechamento a esta semana; João Bogado sinalizou positivamente mas ainda não confirmou (retorno esperado até terça, 21/04) — sinal positivo, mas não definitivo [silver-007, silver-008].
+- **Ambiguidade de resolução de entidades**: Bernardo levantou o caso de dois "Lucas" no mesmo projeto gerando resolução ambígua no Gold sistemático; foi conscientemente aceito como problema também do time humano, "aceitar por enquanto" — não é bloqueador, mas é uma dívida latente [silver-021, gold-003].
+- **Latência do Gold verbose**: 3–4 minutos na primeira chamada; mitigado por cache server-side, mas ainda um ponto de atenção operacional caso o volume de uso cresça com os pilotos [silver-022].
+
+## O que não está coberto pelos dados
+
+Não encontrei golds ou silvers tratando de riscos financeiros/runway, jurídicos ou de infraestrutura fora do escopo de produto/entity layer — se você tinha algum desses em mente, os dados atuais não cobrem esse ângulo e eu não tenho base para afirmar nada sobre eles.
+---
+Lineage consultado:
+  gold: gold-001, gold-002, gold-003, gold-004
+  silver: silver-001, silver-002, silver-003, silver-006, silver-007, silver-008, silver-011, silver-012, silver-019, silver-020, silver-021, silver-022
+
+[trace das tool calls]
+  → search_golds({"query": "risco"})
+  → search_entities({"query": "risco"})
+  → get_gold({"gold_id": "gold-001"})
+  → search_golds({"query": "bloqueio"})
+  → search_golds({"query": "deadline"})
+  → search_golds({"query": "projeto"})
+  → search_golds({"query": "design partners"})
+  → search_golds({"query": "produção"})
+  → get_gold({"gold_id": "gold-002"})
+  → get_gold({"gold_id": "gold-003"})
+  → get_gold({"gold_id": "gold-004"})
+  → get_silvers({"silver_ids": ["silver-001", "silver-002", "silver-003", "silver-011", "silver-012", "silver-019", "silver-020", "silver-021", "silver-022"]})
+  → get_entity({"ref": "Person:Henrique Silva"})
+  → get_entity({"ref": "Project:Entity Layer"})
+  → get_entity({"ref": "Project:VTEX Partnership"})
+  → get_entity({"ref": "Project:Itaú Relationship"})
+  → get_entity({"ref": "Goal:Stabilize Medallion Ownership Post-Henrique"})
+  → get_silvers({"silver_ids": ["silver-006", "silver-007", "silver-008"]})
+
