@@ -1,0 +1,1163 @@
+[
+ {
+  "question_id": "q01_agents_broke_disambiguation",
+  "model": "claude-sonnet-5",
+  "text": "Os agentes do Bernardo quebraram por um estouro de memória causado por um problema de infraestrutura no runtime de agentes, não por um bug no código dele especificamente [gold-005].\n\n**O que aconteceu:** Lucas Quaresma (que colabora com Bernardo no Agent Runtime) percebeu vários agentes estourando memória e identificou que o Aliamit estava disparando um número muito maior de chamadas paralelas do que o baseline esperado [silver-009], [bronze-slack-004]. A causa raiz foi o pooling do `httpx`: ele estava segurando as *responses* inteiras em memória enquanto o Aliamit gerava N chamadas paralelas, o que fez a memória disparar muito além do normal [gold-005], [silver-009].\n\n**A correção:** Lucas mergeou o PR #287, aplicando limites ao pool de conexões e passando a fazer streaming das responses em vez de carregá-las inteiras na memória. Em cerca de 30 minutos após o merge, o consumo de memória voltou ao baseline, e Bernardo confirmou no Slack que seus agentes voltaram a rodar normalmente (\"meus agentes também estavam sofrendo, rodando de novo agora\") [bronze-slack-004], [silver-009].\n\n**Contexto adjacente relevante (não perguntado, mas importante):**\nThomas Filshill, ao validar o fix, sinalizou explicitamente que essa correção foi **reativa** — resolveu o sintoma imediato, mas não criou um guardrail permanente contra esse tipo de estouro de memória. Ele pediu um ticket de follow-up para isso, sem urgência definida [gold-005], [silver-010], [bronze-slack-004]. Ou seja: o risco de recorrência (um novo pico de chamadas paralelas do Aliamit ou de outro consumidor causando o mesmo estouro) continua existindo até que esse guardrail seja implementado, e atualmente não há prazo nem responsável formalizado para esse trabalho preventivo — vale acompanhar se esse ticket foi de fato aberto.",
+  "fetched": {
+   "gold": [
+    "gold-005"
+   ],
+   "silver": [
+    "silver-009",
+    "silver-010"
+   ],
+   "bronze": [
+    "bronze-slack-004"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "Bernardo"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "agentes quebraram"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-005"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Bernardo Aires"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-009",
+      "silver-010"
+     ]
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-slack-004"
+    }
+   }
+  ],
+  "turns": 4,
+  "latency_s": 18.3,
+  "input_tokens": 13668,
+  "output_tokens": 1090,
+  "error": null,
+  "lineage_recall": 0.0,
+  "judge": {
+   "must_include_hits": [
+    false,
+    false,
+    false,
+    false
+   ],
+   "nuance_hits": [
+    false,
+    false,
+    false
+   ],
+   "must_not_violations": [
+    true,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "The candidate answers with the wrong incident (httpx/Aliamit memory blowout) as the primary cause, missing the canonical PR 312 parsing break entirely.",
+   "score": 0.0,
+   "hallucination": true,
+   "correct": false
+  }
+ },
+ {
+  "question_id": "q02_ngcash_negotiation",
+  "model": "claude-sonnet-5",
+  "text": "## Onde está a negociação com o NGCash\n\nA negociação está em **fase de contraproposta, aguardando retorno interno do NGCash**, com um deadline importante nesta semana.\n\n**Linha do tempo** [gold-004]:\n1. Em 18/04, **João Bogado** (Product Lead do NGCash) formalizou por email a proposta inicial de entrada como design partner: **$5k/mês**, contrato de 6 meses, com rev share dos leads vindos do canal deles [silver-006, bronze-email-005].\n2. Em 19/04, **Thomas Filshill** (líder da negociação pelo lado da Alia) contra-propôs **$6k/mês**, argumentando que esse valor está abaixo do piso que vem sendo ancorado com os outros design partners (que seria $6,5k). A condição: fechamento ainda **nesta semana** e um ciclo de feedback **2x/semana com Bernardo Aires** durante os primeiros 60 dias [silver-007, bronze-email-005].\n3. Ainda em 19/04 (à noite), João respondeu que vai **rodar a contraproposta internamente** e volta com posição até **terça-feira (21/04)**. Ele sinalizou que, se fechar em $6k, aceita o ritmo de feedback proposto — um sinal positivo, mas ainda não definitivo [silver-008, bronze-email-005].\n\nOu seja: a bola está do lado do NGCash, esperando validação interna deles sobre o valor de $6k/mês. Formalmente existe um objetivo explícito no knowledge graph — **\"Close NGCash at $6k+\"**, com meta de assinatura até o fim desta semana [Objective:Close NGCash at $6k+].\n\n**Contexto adjacente relevante que vale trazer:**\n- Esse fechamento não é isolado: Thomas está usando o preço do NGCash para **ancorar o pricing dos próximos design partners** (VTEX e Itaú) [silver-007]. Um desconto aqui pressiona as negociações seguintes.\n- **Livia Kuga** já está associada ao projeto como responsável pelo **onboarding operacional** assim que o contrato for assinado [Project:NGCash Partnership] — ou seja, há capacidade de execução pronta para o momento em que fechar.\n- A meta maior por trás disso é **\"Three Paid Design Partners by June\"**, que inclui NGCash, VTEX e um terceiro parceiro (Itaú como principal candidato) — o NGCash é a peça mais avançada das três no momento [gold-004].\n- Não há, nos dados disponíveis, nenhum sinal de risco ou bloqueio novo além do prazo de terça-feira; se João não retornar dentro do prazo combinado, isso ficaria fora do que os dados atuais cobrem — não há bronze/silver posterior a 19/04 sobre este tópico.",
+  "fetched": {
+   "gold": [
+    "gold-004"
+   ],
+   "silver": [
+    "silver-006",
+    "silver-007",
+    "silver-008"
+   ],
+   "bronze": [
+    "bronze-email-005"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "NGCash"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "NGCash"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-004"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:NGCash Partnership"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Objective:Close NGCash at $6k+"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:João Bogado"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-006",
+      "silver-007",
+      "silver-008"
+     ]
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-email-005"
+    }
+   }
+  ],
+  "turns": 5,
+  "latency_s": 24.7,
+  "input_tokens": 19997,
+  "output_tokens": 1437,
+  "error": null,
+  "lineage_recall": 1.0,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "All rubric items covered accurately; the invented adjacent details (VTEX/Itaú, Livia onboarding) are hedged and don't fabricate email contract terms.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ },
+ {
+  "question_id": "q03_henrique_exit_impact",
+  "model": "claude-sonnet-5",
+  "text": "Aqui está o quadro completo do que muda com a saída do Henrique (Engineer — Entity Layer, saída confirmada em 2026-04-24) [Person:Henrique Silva]:\n\n**1. O entity layer perde seu único dono e fica em risco de orfandade**\nHenrique era o dono exclusivo do entity layer, e antes de sair mergeou o PR #312, que adicionou os labels `Goal` e `Objective` ao knowledge graph — mas **sem integrar os parsers dos agentes downstream** [gold-001, silver-001, bronze-github-003]. O próprio PR já registrava o aviso: *\"Does not update downstream consumers... Last commit before I hand off — sorry about the rush\"* [bronze-github-003].\n\n**2. Isso já causou quebra em produção**\nNo dia 19/04, os agentes de Bernardo Aires (Engineer, downstream consumer do entity layer) começaram a receber entidades com campos `goals`/`okrs` não mapeados e o parsing quebrou em produção [silver-001, bronze-slack-001]. Henrique confirmou no Slack: *\"eu mergeei o PR 312 na sexta... não rodei integração com os agentes downstream, desculpa\"* [bronze-slack-001].\n\n**3. O handoff foi redirecionado para duas pessoas, não uma**\nThomas Filshill (liderança) decidiu que o handoff do Henrique vai para Bernardo **e** Lucas Quaresma em conjunto, aproveitando que Lucas está migrando para o core nesta mesma semana [silver-002, bronze-slack-001]. Ficou marcado um sync de documentação para a segunda-feira da última semana de Henrique [silver-003] — mas, segundo a narrativa gold, **se esse sync não acontecer, o entity layer fica órfão com mudanças não documentadas em produção** [gold-001].\n\n**4. Criou-se estrutura formal para tratar o risco**\nIsso gerou um objective explícito, *\"Entity Layer Handoff Before 2026-04-24\"* — Henrique documenta o contrato de goals/OKRs, Bernardo e Lucas assumem co-ownership antes da saída [Objective:Entity Layer Handoff Before 2026-04-24] — e um goal maior, *\"Stabilize Medallion Ownership Post-Henrique\"*, cujo critério de sucesso é que nenhuma pessoa seja ponto único de falha para entity layer, silver ou gold até o final de abril [Goal:Stabilize Medallion Ownership Post-Henrique]. O projeto \"Knowledge Graph Production\" também nasceu dessa migração: tirar a geração do KG do estado de \"prototype do Henrique\" e estabilizar as escritas no neo4j sob Bernardo/Lucas [Project:Knowledge Graph Production].\n\n**Contexto adjacente relevante (não perguntado diretamente):**\n- A decisão de design sobre entity layer entre Bernardo e Lucas estava **adiada** — os dois já estavam alinhados sobre silver/gold (coluna nulável para retrocompatibilidade, inferência deferida ao gold), mas não sobre entity layer, e isso só virou urgente por causa da saída do Henrique [gold-002, silver-004].\n- Vale notar que não há desalinhamento real entre Bernardo e Lucas — existe uma sincronização que simplesmente não tinha sido marcada, e o handoff do Henrique está forçando essa conversa a acontecer agora [gold-002].\n\nToda a evidência primária aqui vem de duas fontes: a thread do Slack #alia-eng do dia 19/04 [bronze-slack-001] e o PR #312 no GitHub [bronze-github-003]. Não há, nos dados que consultei, detalhes sobre o que foi efetivamente discutido no sync de segunda-feira (se já aconteceu) — isso seria a lacuna mais importante para acompanhar em uma atualização futura.",
+  "fetched": {
+   "gold": [
+    "gold-001",
+    "gold-002"
+   ],
+   "silver": [
+    "silver-001",
+    "silver-002",
+    "silver-003",
+    "silver-004",
+    "silver-005"
+   ],
+   "bronze": [
+    "bronze-github-003",
+    "bronze-slack-001"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "Henrique"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Henrique Silva"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:Knowledge Graph Production"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Goal:Stabilize Medallion Ownership Post-Henrique"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Objective:Entity Layer Handoff Before 2026-04-24"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "Henrique handoff"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-001"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-002"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-001",
+      "silver-002",
+      "silver-003",
+      "silver-004",
+      "silver-005"
+     ]
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-slack-001"
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-github-003"
+    }
+   }
+  ],
+  "turns": 6,
+  "latency_s": 32.8,
+  "input_tokens": 29979,
+  "output_tokens": 2135,
+  "error": null,
+  "lineage_recall": 1.0,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "Complete and accurate answer hitting all must_include and nuance items with proper lineage citations and no violations.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ },
+ {
+  "question_id": "q04_alignment_demo_case",
+  "model": "claude-sonnet-5",
+  "text": "## Sim, estão alinhados — sobre silver e gold\n\nBernardo Aires (Engineer — Agents & Gold) e Lucas Quaresma (Engineer — Core, em migração) já convergiram nas decisões concretas do medallion: usar uma coluna nulável no silver para manter retrocompatibilidade, e deferir a inferência de subcategorias para a camada gold [gold-002][silver-004]. Essa checagem foi feita pelo próprio Bernardo, que rodou o Gold verbose contra essa exata pergunta durante um sync com Thomas Filshill em 20/04, confirmando que \"ele puxou tudo: discussão de silver/gold, opção de coluna nulável, decisão adiada\" [bronze-meet-002].\n\nNão há desalinhamento de fato entre os dois nessa frente — o que existe é uma sincronização ainda não formalizada, que a narrativa gold descreve como algo que \"o handoff vai forçar\" [gold-002].\n\n## O ponto em aberto: entity layer, e por que isso importa agora\n\nOnde a coisa fica tensa é na camada de entity layer (não silver/gold), e aqui a decisão foi adiada e ganhou urgência por um motivo que a pergunta não mencionou: **Henrique Silva está saindo da empresa** — seu último dia é 24/04/2026, para se juntar a uma startup que adquiriu o conceito CCC [Person:Henrique Silva][gold-002].\n\nHenrique é hoje o dono único do entity layer e mergeou recentemente o PR 312, adicionando `goals` e `okrs` como novas entidades — mudança que quebrou o parsing dos agentes de Bernardo em produção, porque a integração downstream não foi testada [bronze-slack-001]. Diante disso, Thomas Filshill determinou que o handoff de Henrique seja feito para Bernardo **e** Lucas em conjunto, aproveitando que Lucas está migrando para o core nesta mesma semana [silver-002][bronze-slack-001]. Existe até um objective formal para isso — \"Entity Layer Handoff Before 2026-04-24\" — com prazo definido pela saída de Henrique [Objective:Entity Layer Handoff Before 2026-04-24].\n\nOu seja: o entity layer corre risco real de ficar órfão se o handoff não for concluído antes de 24/04. O próprio teste do Gold verbose validou esse comportamento — ao perguntar sobre alinhamento de entity layer, o sistema trouxe automaticamente a saída de Henrique sem que isso tivesse sido perguntado [silver-005][bronze-meet-002].\n\n**Resumo da lacuna real:** silver/gold = alinhados. Entity layer = decisão pendente, dono saindo em poucos dias, handoff ainda não fechado entre Bernardo e Lucas.",
+  "fetched": {
+   "gold": [
+    "gold-002"
+   ],
+   "silver": [
+    "silver-002",
+    "silver-004",
+    "silver-005"
+   ],
+   "bronze": [
+    "bronze-meet-002",
+    "bronze-slack-001"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "Bernardo"
+    }
+   },
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "Lucas"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "medallion camadas"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-002"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Objective:Entity Layer Handoff Before 2026-04-24"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-004",
+      "silver-002",
+      "silver-005"
+     ]
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Henrique Silva"
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-meet-002"
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-slack-001"
+    }
+   }
+  ],
+  "turns": 5,
+  "latency_s": 24.3,
+  "input_tokens": 21424,
+  "output_tokens": 1587,
+  "error": null,
+  "lineage_recall": 1.0,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "Complete answer covering all rubric items with correct layer distinction, Henrique's 2026-04-24 departure, co-ownership handoff, and the Gold verbose self-reference; cites multiple IDs.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ },
+ {
+  "question_id": "q05_linkedin_thin_data",
+  "model": "claude-sonnet-5",
+  "text": "Com base no knowledge graph e no lineage disponível, aqui está o que sei sobre o **LinkedIn Outreach**:\n\n**Status do projeto**\n\nO LinkedIn Outreach é uma ferramenta interna de outreach + sequenciamento, construída inteiramente por Lucas Quaresma (Engenheiro — Core), que substituiu as ferramentas pagas Lambdlist e AppFly, gerando uma economia estimada de $600–700/mês [Project:LinkedIn Outreach]. O projeto está marcado como ativo (`valid_from: 2025-12-01`, sem `valid_to`), ou seja, sem sinal de encerramento no knowledge graph.\n\nLucas é o único membro/autor registrado do projeto (\"Sole author of the in-house outreach tool\") [Project:LinkedIn Outreach].\n\n**O que está faltando nos dados**\n\nImportante ser transparente: não há nenhuma narrativa gold, interpretação silver ou evidência bronze que trate especificamente do LinkedIn Outreach. Busquei em `search_golds` por \"LinkedIn Outreach\", \"Lucas outreach tool\" e \"Lambdlist AppFly\" e nada retornou [sem gold correspondente]. Os golds e silvers que citam Lucas Quaresma (gold-001, gold-002, gold-005, gold-006 e os silvers relacionados) tratam de outros projetos dele — Entity Layer, Gold Synthesis, Agent Runtime e Alia Meetings — não do LinkedIn Outreach [silver-002, silver-004, silver-009, silver-010, silver-017, silver-018].\n\nOu seja, o que existe é só a descrição estática do nó no knowledge graph, sem lineage de conversas, decisões ou eventos recentes documentados. Não consigo dizer se o projeto está em manutenção, pausado ou tocando normalmente — apenas que ele existe, está ativo no grafo e tem Lucas como único dono.\n\n**Contexto adjacente relevante**\n\nVale destacar um ponto de atenção que não foi perguntado mas é pertinente: Lucas está em pleno processo de migração para trabalho de \"core\", assumindo, junto com Bernardo Aires, a co-propriedade do Entity Layer após a saída de Henrique Silva [gold-001, silver-002]. Como Lucas é o único autor/dono do LinkedIn Outreach, essa migração de foco para Entity Layer, Gold Synthesis e Agent Runtime pode significar que o LinkedIn Outreach fica sem manutenção ativa nem dono dedicado — um risco de concentração que os dados não abordam diretamente, mas que decorre da sobrecarga de Lucas em múltiplos projetos (Entity Layer, Alia Meetings, Knowledge Graph Production, Agent Runtime e LinkedIn Outreach simultaneamente) [Person:Lucas Quaresma].",
+  "fetched": {
+   "gold": [],
+   "silver": [
+    "silver-002",
+    "silver-004",
+    "silver-009",
+    "silver-010",
+    "silver-017",
+    "silver-018"
+   ],
+   "bronze": [
+    "bronze-slack-001"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "LinkedIn Outreach"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "LinkedIn Outreach"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:LinkedIn Outreach"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Lucas Quaresma"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "Lucas outreach tool"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "Lambdlist AppFly"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-002",
+      "silver-004",
+      "silver-009",
+      "silver-010",
+      "silver-017",
+      "silver-018"
+     ]
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-slack-001"
+    }
+   }
+  ],
+  "turns": 6,
+  "latency_s": 32.6,
+  "input_tokens": 25000,
+  "output_tokens": 1881,
+  "error": null,
+  "lineage_recall": null,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "Comprehensive and accurate answer hitting all must-include and nuance items, correctly stating absence of coverage without inventing status; the parallel to the Henrique single-point-of-failure pattern is implicitly captured via the ownership concentration risk after Henrique's departure.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ },
+ {
+  "question_id": "q06_design_partners_goal",
+  "model": "claude-sonnet-5",
+  "text": "## Status da meta: três design partners pagos até junho\n\nA meta [Goal:Three Paid Design Partners by June] tem as três posições já identificadas — NGCash, VTEX e Itaú como candidato líder para a terceira vaga —, mas nenhuma delas está fechada ainda [gold-004]. Vou detalhar cada perna:\n\n**NGCash — negociação em andamento, sinal positivo mas não fechado**\nJoão Bogado (Product Lead da NGCash) formalizou proposta de $5k/mês por 6 meses com rev share de leads do canal deles [silver-006]. Thomas Filshill (CEO) contra-propôs $6k/mês, condicionando o fechamento a esta semana e a um ciclo de feedback 2x/semana com Bernardo Aires (engenheiro) durante os primeiros 60 dias — esse valor está sendo usado para ancorar o pricing dos próximos design partners [silver-007]. João aceitou levar a contraproposta internamente e prometeu retorno até terça (21/04) [silver-008]. Na thread de e-mail original, ele escreve: \"topamos entrar como design partner... $5k/mês\", e Thomas responde que o piso que estão ancorando é $6.5k, oferecendo defender $6k se fecharem na semana e entrarem no ritmo de feedback proposto [bronze-email-005]. Ou seja: sinal comercial forte, mas ainda sem contrato assinado.\n\n**VTEX — aceite conceitual, bloqueada em escopo**\nA VTEX aceitou o piloto em princípio, mas está travada esperando Anderson Queiroz trazer a lista de datasets liberados, com deadline em 28/04/2026 — isso bloqueia Bernardo de preparar os silvers específicos do piloto [silver-011]. Há uma restrição forte de PII (nenhum dado de merchant pode saltar da conta deles), o que levou à proposta de começar o piloto por dados internos de eng/produto antes de qualquer superfície comercial [silver-012]. Essa é a perna mais distante de fechar comercialmente hoje.\n\n**Itaú — intro agendada, condicionada a Gold em produção**\nAriane Gomes-Santos confirmou intro de Valeria e Tatyana (Itaú) para a primeira semana de maio, mas Thomas condicionou essa demo a ter o Gold \"rodando num caso real — não só demo\" [silver-019, silver-020]. No Slack: \"quero ter Gold rodando num caso real pra mostrar... Bernardo, isso pressiona o ship-today\", e Bernardo se compromete a ter o caso do Henrique funcional até segunda [bronze-slack-010]. Essa perna depende diretamente do ship técnico do Gold, ainda não confirmado como concluído nos dados que tenho.\n\n## Risco adjacente que a pergunta não fez, mas que aparece no grafo\n\nAs três pernas convergem, direta ou indiretamente, em **Bernardo Aires**: ele é o ponto de contato do ciclo de feedback 2x/semana da NGCash [silver-007], é quem prepara os silvers específicos do piloto VTEX [silver-011], e é quem carrega a pressão do \"ship-today\" do Gold que condiciona a demo do Itaú [silver-020]. Ao mesmo tempo, o grafo mostra que Bernardo está absorvendo a saída de **Henrique Silva** (Engenheiro — Entity Layer), que está saindo da empresa em 24/04/2026 para uma startup, e cujo handoff (PR 312, camada de entidades) bloqueia Bernardo até a transição ser concluída [Person:Henrique Silva]. Isso significa que o mesmo engenheiro que é dependência crítica para fechar NGCash, desbloquear VTEX e viabilizar a demo do Itaú também está no meio de um handoff de saída de colega, no mesmo intervalo temporal (final de abril) em que os três deadlines comerciais estão concentrados. Vale sinalizar isso como risco de concentração/capacidade antes de tratar a meta como \"no caminho\".\n\n**Lacuna nos dados:** não há, até agora, silver/gold confirmando fechamento de contrato com NGCash (resposta de João esperada só depois de 21/04) nem confirmação de que o Gold já está de fato em produção para a demo do Itaú — então não posso afirmar se a meta está \"on track\" no sentido de contratos assinados, apenas que as três frentes estão ativas e em estágios distintos de negociação/bloqueio.",
+  "fetched": {
+   "gold": [
+    "gold-004"
+   ],
+   "silver": [
+    "silver-006",
+    "silver-007",
+    "silver-008",
+    "silver-011",
+    "silver-012",
+    "silver-019",
+    "silver-020"
+   ],
+   "bronze": [
+    "bronze-email-005",
+    "bronze-slack-010"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "design partners"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "design partners"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Goal:Three Paid Design Partners by June"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-004"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-006",
+      "silver-007",
+      "silver-008",
+      "silver-011",
+      "silver-012",
+      "silver-019",
+      "silver-020"
+     ]
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:NGCash Partnership"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:VTEX Partnership"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:Itaú Relationship"
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-email-005"
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-slack-010"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Bernardo Aires"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Henrique Silva"
+    }
+   }
+  ],
+  "turns": 6,
+  "latency_s": 45.9,
+  "input_tokens": 34551,
+  "output_tokens": 2984,
+  "error": null,
+  "lineage_recall": 1.0,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "Complete and accurate; covers all rubric items, correct counterparties, dates, and PII/ship dependencies with lineage citations.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ },
+ {
+  "question_id": "q07_vtex_constraints",
+  "model": "claude-sonnet-5",
+  "text": "## Piloto com a VTEX: restrições e próximos passos\n\n**Onde está o piloto hoje:** a VTEX aceitou conceitualmente rodar um piloto de ferramenta Alia para o COO deles, mas o projeto está travado em definição de escopo, não em execução [gold-004], [silver-011]. O lead da Alia no relacionamento é Thomas Filshill, do lado da VTEX é Anderson Queiroz (Partnerships), que está definindo internamente quais datasets podem ser liberados [Project:VTEX Partnership].\n\n### Restrições\n1. **PII/dados de merchant não podem saltar a conta da VTEX** — essa é a restrição mais forte identificada: nenhum dado de cliente/merchant da VTEX pode sair do ambiente deles [silver-012], [bronze-notion-006].\n2. **Escopo de datasets ainda não fechado** — Anderson precisa retornar com a lista de datasets liberados para o piloto; até isso acontecer, Bernardo Aires (que prepararia os silvers específicos) não tem o que trabalhar — é um bloqueador direto de escopo [silver-011].\n3. Por conta da restrição de PII, a proposta que está na mesa é **começar o piloto por dados internos** (engenharia/produto), evitando qualquer superfície comercial (merchant) na primeira fase, migrando para dados comerciais só depois, se aprovado [silver-012], [bronze-notion-006].\n\n### Próximos passos (extraídos da reunião registrada em [bronze-notion-006])\n- **Anderson Queiroz** se comprometeu a voltar com a lista de datasets liberados até **2026-04-28** [silver-011], [gold-004].\n- **Thomas Filshill** precisa alinhar com **Bernardo Aires** se o Gold \"sistemático\" (produto padrão) serve para esse primeiro piloto sem customização, ou se será necessário adaptar.\n- Assim que o escopo for fechado, **Bernardo Aires** define quais silvers específicos a VTEX vai precisar antes dos golds serem produzidos.\n\n### Contexto adjacente relevante\n- Esse objetivo (\"VTEX Pilot Dataset Scope Locked\") é uma dependência direta dentro da meta maior \"Three Paid Design Partners by June\" [Goal:Three Paid Design Partners by June] — a VTEX é a segunda das três posições de design partner que a Alia precisa converter até junho, junto com NGCash (em negociação de valor, $6k+) e Itaú (intro agendada condicionada ao Gold rodar em caso real) [gold-004]. Ou seja, um atraso no scoping da VTEX tem peso direto na meta trimestral, não é um risco isolado.\n- Vale notar que o bloqueio atual não é técnico nem de produto — é de governança de dados do lado da VTEX, então o próximo movimento crítico depende inteiramente de Anderson Queiroz entregar a lista de datasets; não há alavanca clara do lado da Alia para acelerar isso além do prazo de 28/04 já acordado.\n\n**O que falta nos dados:** não há ainda um silver/gold registrando o retorno de Anderson com a lista de datasets (o prazo de 28/04 ainda não foi atingido na data da última atualização, 21/04), nem uma silver mais recente sobre a conversa entre Thomas e Bernardo quanto ao uso do Gold sistemático no piloto. Se essas conversas já ocorreram, ainda não foram capturadas no lineage disponível.",
+  "fetched": {
+   "gold": [
+    "gold-004"
+   ],
+   "silver": [
+    "silver-011",
+    "silver-012"
+   ],
+   "bronze": [
+    "bronze-notion-006"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "VTEX piloto"
+    }
+   },
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "VTEX"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-004"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:VTEX Partnership"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Objective:VTEX Pilot Dataset Scope Locked"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Anderson Queiroz"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-011",
+      "silver-012"
+     ]
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-notion-006"
+    }
+   }
+  ],
+  "turns": 5,
+  "latency_s": 29.3,
+  "input_tokens": 21062,
+  "output_tokens": 1683,
+  "error": null,
+  "lineage_recall": 1.0,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "Complete and accurate answer hitting all rubric items with correct date and no violations.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ },
+ {
+  "question_id": "q08_advisors_evidence_decision",
+  "model": "claude-sonnet-5",
+  "text": "## Decisão sobre evidências de entidades no painel\n\nNa reunião de advisors \"Evidence Display & Alignment Panel\" (20/04), ficou decidido que evidências vindas de entidades (ex.: \"esse projeto tem esse dono\") vão aparecer no painel como um **chip visualmente distinto** das evidências vindas de silver [gold-003][silver-015][bronze-meet-008].\n\nA lógica por trás disso, levantada por **Lidia Mesquita (advisor)** e **Mati Veloso (advisor)**: silver representa um \"evento\" (algo que aconteceu, ex: uma reunião), enquanto entidade representa um \"estado\" (ex: \"essa pessoa é dona deste projeto\") — por isso precisam ser diferenciáveis visualmente, seja por cor ou forma [silver-015][bronze-meet-008].\n\nO chip será **clicável**, abrindo um card lateral com o detalhe da entidade [silver-015][bronze-meet-008].\n\nUm ponto importante veio de **Veronica Serra (advisor)**: do lado comercial, o que vende o produto Gold é justamente a \"profundidade da resposta\" — se a evidência de entidade for escondida (por exemplo, virar hover ou colapsar), isso enfraquece a proposta de valor. Por isso ela defendeu que a evidência fique **inline e óbvia**, não escondida [silver-016][bronze-meet-008].\n\n**Thomas Filshill (fechando a decisão)** resumiu: chip distinto por tipo de evidência, tudo clicável, card lateral para o detalhe — e ele levaria a especificação para **Bernardo Aires (Engineer — Agents & Gold)** implementar, voltando com um mockup [bronze-meet-008].\n\n### Contexto adjacente relevante\n\nEssa decisão está registrada como um objective ainda em aberto — \"Evidence-from-Entities Dashboard Spec\" — descrito como um \"dashboard blocker\" ligado ao Project:Gold Synthesis [gold-003] (via `get_entity`). Ou seja, embora a direção de design tenha sido acordada, a implementação (o mockup do Bernardo) ainda não está concluída — é um bloqueio pendente para a maturidade completa do painel do Gold, que já está em produção para pilotos hoje [gold-003].\n\nVale notar também que essa mesma narrativa gold (gold-003) menciona uma segunda questão aberta, não relacionada diretamente à sua pergunta mas que compartilha o mesmo contexto de decisão: ambiguidade de nomes (dois \"Lucas\" no mesmo projeto) ficou definida como \"aceitar por enquanto\", sem solução automatizada — é tratada como problema compartilhado com o time humano [gold-003].",
+  "fetched": {
+   "gold": [
+    "gold-003"
+   ],
+   "silver": [
+    "silver-015",
+    "silver-016"
+   ],
+   "bronze": [
+    "bronze-meet-008"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "evidências entidades painel"
+    }
+   },
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "entity layer"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-003"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Objective:Evidence-from-Entities Dashboard Spec"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-015",
+      "silver-016"
+     ]
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-meet-008"
+    }
+   }
+  ],
+  "turns": 5,
+  "latency_s": 25.5,
+  "input_tokens": 19336,
+  "output_tokens": 1379,
+  "error": null,
+  "lineage_recall": 1.0,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "Complete and accurate answer covering all rubric items with correct attributions and lineage citations.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ },
+ {
+  "question_id": "q09_meetings_scale_gap",
+  "model": "claude-sonnet-5",
+  "text": "## Status atual do Alia Meetings\n\nO Alia Meetings é o bot de Google Meet que entra nas chamadas, transcreve e alimenta a camada bronze com dados [Project:Alia Meetings]. Hoje está em piloto, rodando **4–8 reuniões/dia**, com André Castro (testador externo / design partner seed) validando o volume no dia a dia [gold-006].\n\nNa semana passada houve um susto de estabilidade: André reportou gap de transcrição de cerca de 2 minutos em 2 das 6 reuniões testadas em um único dia. Lucas Quaresma (engenheiro, mantenedor primário do bot) diagnosticou o problema como reconexão de websocket, aplicou um fix e pediu para André testar de novo [silver-017]. No mesmo dia, à noite, André confirmou: duas reuniões seguidas rodaram **sem nenhum gap**, e ele próprio avaliou que \"deve ser confiável pra volume maior\" [bronze-slack-009].\n\nOu seja: tecnicamente o bot está estável agora, pelo menos no volume atual de piloto.\n\n## O que falta para escalar\n\nDireto da mesma thread, Thomas Filshill (CEO/Founder) já sinalizou a próxima trava antes de ir para 20+ reuniões/dia: será preciso um **dashboard mínimo de saúde do bot** para monitorar isso em produção — mas ele mesmo classificou isso como não-urgente hoje [silver-018] [bronze-slack-009]. O goal formal que baliza essa meta é \"Meetings at Production Scale\", definido como sustentar 20+ reuniões transcritas/dia entre pilotos até o final de maio [Goal:Meetings at Production Scale].\n\nEntão, resumindo o gap entre 4–8/dia e 20+/dia:\n1. Observabilidade — dashboard de saúde do bot (não construído ainda, sinalizado por Thomas, sem dono ou prazo definido) [silver-018].\n2. Validação em maior escala — até agora o fix de websocket só foi testado em 2 reuniões pós-patch; não há evidência ainda de estabilidade sob carga maior [silver-017].\n\n## Risco adjacente que a pergunta não fez, mas que aparece no grafo\n\nVale destacar: Lucas Quaresma é o mantenedor primário do Alia Meetings, mas seu papel atual no grafo já está descrito como \"Engineer — Core (moving)\" — ele está migrando para trabalho de core esta semana, assumindo co-ownership da entity layer no handoff pós-Henrique Silva [Person:Lucas Quaresma]. O próprio gold-006 registra isso explicitamente: \"Lucas continua como primário apesar da migração para core, com sobreposição natural pelo handoff do entity layer\" [gold-006]. \n\nIsso é um ponto de atenção real: a pessoa que precisaria construir o dashboard de saúde e sustentar a estabilidade do bot para chegar a 20+/dia por dia está, ao mesmo tempo, sendo redistribuída para outro projeto crítico (Entity Layer / Knowledge Graph Production). Não há, nos dados, um segundo owner designado para o Alia Meetings caso essa sobreposição não se sustente.",
+  "fetched": {
+   "gold": [
+    "gold-006"
+   ],
+   "silver": [
+    "silver-017",
+    "silver-018"
+   ],
+   "bronze": [
+    "bronze-slack-009"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "Alia Meetings"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "Alia Meetings"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-006"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:Alia Meetings"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Goal:Meetings at Production Scale"
+    }
+   },
+   {
+    "name": "get_silvers",
+    "args": {
+     "silver_ids": [
+      "silver-017",
+      "silver-018"
+     ]
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Lucas Quaresma"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Thomas Filshill"
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-slack-009"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:André Castro"
+    }
+   }
+  ],
+  "turns": 5,
+  "latency_s": 28.7,
+  "input_tokens": 22294,
+  "output_tokens": 1805,
+  "error": null,
+  "lineage_recall": 1.0,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "Complete and accurate; all rubric items covered with correct numbers, dates, and lineage citations, no violations.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ },
+ {
+  "question_id": "q10_week_risks_synthesis",
+  "model": "claude-sonnet-5",
+  "text": "Agora tenho o quadro completo, com lineage confirmado até o bronze. Aqui está a resposta.\n\n## Os três maiores riscos desta semana (20–24/04/2026)\n\n**1. Entity layer sem dono, com a saída do Henrique Silva em 24/04 — o risco mais agudo.**\nHenrique Silva (Engenheiro, Entity Layer, saindo em 2026-04-24) [get_entity Person:Henrique Silva] mergeou o PR 312 na sexta anterior, adicionando `goals` e `okrs` como entidades novas no entity layer, mas sem integrar os parsers dos agentes downstream. Isso quebrou em produção os agentes de Bernardo Aires no dia 19/04: \"parsing dos meus agentes tá quebrado... alguém mexeu no entity layer?\" [bronze-slack-001]. Henrique confirmou que mergeou sem rodar a integração e só pode sentar para documentar na segunda-feira — sua última semana [bronze-slack-001], [gold-001]. Thomas Filshill (liderança) direcionou o handoff para Bernardo **e** Lucas Quaresma em conjunto, aproveitando a migração do Lucas para o core [gold-001], [silver-001/002/003]. O risco explícito, formalizado como goal da empresa, é: \"nenhuma pessoa pode ser ponto único de falha para entity layer, silver ou gold até fim de abril\" — e o entity layer é apontado como \"o maior risco de ownership\" do medallion [Goal:Stabilize Medallion Ownership Post-Henrique]. Se o sync de documentação de segunda não acontecer antes da saída do Henrique em 24/04, **o entity layer fica órfão, com mudanças em produção não documentadas** [gold-001].\n\n**2. Dependências externas travadas em prazos apertados no pipeline de design partners.**\nA meta de três design partners pagos até junho depende de três frentes simultâneas, todas com risco de atraso [gold-004]:\n- **NGCash**: negociação de preço em aberto — Thomas contra-propôs $6k com fechamento previsto *nesta mesma semana*; João Bogado (NGCash) só retorna com decisão até terça.\n- **VTEX**: bloqueada em escopo. Anderson Queiroz precisa devolver lista de datasets liberados até 28/04, sob restrição forte de PII de merchants, o que limita o piloto inicial a dados internos [bronze-notion-006], [gold-004].\n- **Itaú**: a intro com Valeria e Tatyana na primeira semana de maio está condicionada ao Gold \"rodar em caso real\" — ou seja, depende diretamente do ship de Gold desta semana (item 3 abaixo). Um atraso no Gold em produção propaga risco para essa negociação [gold-004].\n\n**3. Gold entrando em produção hoje com questões abertas e ponto único de sobrecarga em Lucas Quaresma.**\nGold (verbose para CEO + sistemático para dashboard) vai para produção hoje para os pilotos funcional e core [gold-003]. A latência de 3–4 min na primeira chamada foi aceita como razoável, mas ficaram duas questões não resolvidas: como evidências de entidades aparecem no dashboard (decidido: chip clicável inline) e a ambiguidade de nomes duplicados no grafo (\"dois Lucas no mesmo projeto\"), que ficou como \"aceitar por enquanto\" — ou seja, um problema real sem solução definitiva ainda [gold-003].\n\n## Contexto adjacente que não foi perguntado, mas é relevante\n\n- **Lucas Quaresma está sobrecarregado por sobreposição de responsabilidades**: ele está migrando para o core, assumindo co-ownership do entity layer no handoff do Henrique, e continua como mantenedor primário do Alia Meetings (bot do Google Meet) [get_entity Person:Lucas Quaresma], [gold-006]. Essa sobreposição é citada explicitamente como \"natural\" pelo handoff, mas concentra em uma única pessoa três frentes críticas na mesma semana.\n- **Instabilidade recente de infraestrutura de agentes**: um estouro de memória nos agentes (causado por pooling do httpx sob paralelismo do Aliamit) já havia afetado os agentes de Bernardo antes desta semana; Lucas diagnosticou e resolveu com o PR #287, mas Thomas pediu um guardrail permanente que ainda está só no backlog, sem urgência formal — um risco latente de recorrência [gold-005].\n\n**Faltando nos dados**: não há um nó ou gold dedicado exclusivamente a \"riscos\" como categoria — os riscos aqui foram inferidos a partir das narrativas de handoff, pipeline de parceiros e infraestrutura. Se houver riscos financeiros, jurídicos ou de outra natureza fora do que está registrado no knowledge graph e nos golds consultados, eles não aparecem nos dados disponíveis.",
+  "fetched": {
+   "gold": [
+    "gold-001",
+    "gold-002",
+    "gold-003",
+    "gold-004",
+    "gold-005",
+    "gold-006"
+   ],
+   "silver": [],
+   "bronze": [
+    "bronze-notion-006",
+    "bronze-slack-001"
+   ]
+  },
+  "tool_calls": [
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "risco"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "semana"
+    }
+   },
+   {
+    "name": "search_entities",
+    "args": {
+     "query": "risco"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-001"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-004"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "bloqueio"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "deadline"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "entity layer"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "ship"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "PII"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "meetings"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "core"
+    }
+   },
+   {
+    "name": "search_golds",
+    "args": {
+     "query": "silver"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-002"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-003"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-006"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Henrique Silva"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Person:Lucas Quaresma"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:Entity Layer"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Project:VTEX Partnership"
+    }
+   },
+   {
+    "name": "get_gold",
+    "args": {
+     "gold_id": "gold-005"
+    }
+   },
+   {
+    "name": "get_entity",
+    "args": {
+     "ref": "Goal:Stabilize Medallion Ownership Post-Henrique"
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-slack-001"
+    }
+   },
+   {
+    "name": "get_bronze",
+    "args": {
+     "bronze_id": "bronze-notion-006"
+    }
+   }
+  ],
+  "turns": 9,
+  "latency_s": 62.3,
+  "input_tokens": 68235,
+  "output_tokens": 4082,
+  "error": null,
+  "lineage_recall": 1.0,
+  "judge": {
+   "must_include_hits": [
+    true,
+    true,
+    true
+   ],
+   "nuance_hits": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "must_not_violations": [
+    false,
+    false,
+    false
+   ],
+   "cites_lineage": true,
+   "answers_in_portuguese": true,
+   "notes": "Comprehensive answer covering all must-include and nuance items with correct dates ($6k, 24/04, 21/04, 28/04, terça), proper lineage citations, and no fabricated or resolved-risk claims.",
+   "score": 1.0,
+   "hallucination": false,
+   "correct": true
+  }
+ }
+]
