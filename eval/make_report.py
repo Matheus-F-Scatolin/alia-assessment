@@ -17,6 +17,26 @@ OUT = EVAL_DIR / "report.html"
 
 LAYER = {"gold": "#D9A441", "silver": "#9BA8B5", "bronze": "#C08552"}
 
+# USD per 1M tokens (input, output). Sources: platform.claude.com/docs/en/pricing
+# and ai.google.dev/gemini-api/docs/pricing, as of 2026-07-09.
+# claude-sonnet-5: introductory price (valid through 2026-08-31; standard $3/$15).
+# gemini-3.1-pro-preview: <=200k-prompt tier (every eval request is far below it).
+PRICING = {
+    "claude-opus-4-8": (5.00, 25.00),
+    "claude-sonnet-5": (2.00, 10.00),
+    "claude-haiku-4-5-20251001": (1.00, 5.00),
+    "gemini-3.1-flash-lite": (0.25, 1.50),
+    "gemini-3.5-flash": (1.50, 9.00),
+    "gemini-3.1-pro-preview": (2.00, 12.00),
+}
+
+
+def run_cost(row: dict) -> float | None:
+    price = PRICING.get(row["model"])
+    if price is None:
+        return None
+    return row["input_tokens"] / 1e6 * price[0] + row["output_tokens"] / 1e6 * price[1]
+
 
 def esc(s) -> str:
     return html.escape(str(s))
@@ -55,6 +75,11 @@ def main() -> None:
     # --- leaderboard ---------------------------------------------------------
     lb_rows = ""
     for i, a in enumerate(board):
+        costs = [c for c in (run_cost(r) for r in runs[a["model"]]) if c is not None]
+        total_cost = sum(costs) if costs else None
+        cost_cell = "—" if total_cost is None else f"${total_cost:.3f}"
+        value_cell = ("—" if not total_cost
+                      else f"{a['mean_score'] / total_cost:.1f}")
         lb_rows += f"""<tr>
 <td class="rank">{i + 1}</td><td class="model">{esc(a['model'])}</td>
 <td class="num big">{a['mean_score']:.3f}</td>
@@ -64,6 +89,8 @@ def main() -> None:
 <td class="num">{a['cites_lineage']}/{a['n']}</td>
 <td class="num">{a['mean_latency_s']}s</td>
 <td class="num">{a['mean_tool_calls']}</td>
+<td class="num">{cost_cell}</td>
+<td class="num">{value_cell}</td>
 </tr>"""
 
     # --- heatmap -------------------------------------------------------------
@@ -121,7 +148,8 @@ def main() -> None:
 <summary><span class="badge" style="background:{score_color(s)}">{badge}</span>
 {esc(qid)}{hal}
 <span class="meta">{r['latency_s']}s · {len(r['tool_calls'])} tools ·
-lineage recall {r['lineage_recall'] if r['lineage_recall'] is not None else 'n/a'}</span></summary>
+lineage recall {r['lineage_recall'] if r['lineage_recall'] is not None else 'n/a'}{
+    f" · ${run_cost(r):.4f}" if run_cost(r) is not None else ""}</span></summary>
 <div class="body">
 <p class="q">{esc(q['question'])}</p>
 <div class="cols">
@@ -203,8 +231,15 @@ run: {esc(meta['run_finished'])}</p>
 <table><thead><tr><th></th><th>modelo</th><th style="text-align:right">score</th>
 <th style="text-align:right">corretas (≥0.7)</th><th style="text-align:right">alucinações</th>
 <th style="text-align:right">lineage recall</th><th style="text-align:right">cita IDs</th>
-<th style="text-align:right">latência média</th><th style="text-align:right">tools/pergunta</th></tr></thead>
+<th style="text-align:right">latência média</th><th style="text-align:right">tools/pergunta</th>
+<th style="text-align:right">custo (10 perguntas)</th><th style="text-align:right">score/US$</th></tr></thead>
 <tbody>{lb_rows}</tbody></table>
+<p class="legend">Custo computado dos tokens rastreados por run × preço de lista
+(2026-07-09): opus-4-8 $5/$25, sonnet-5 $2/$10 (preço introdutório até
+2026-08-31; padrão $3/$15), haiku-4-5 $1/$5, gemini-3.1-flash-lite $0.25/$1.50,
+gemini-3.5-flash $1.50/$9, gemini-3.1-pro-preview $2/$12 (faixa ≤200k), por 1M
+de tokens input/output. Exclui o custo do juiz (~60 chamadas de opus-4-8, não
+rastreadas). Sem prompt caching — o loop reenvia o histórico a cada turno.</p>
 
 <h2>Heatmap — modelo × pergunta</h2>
 <table class="hm"><thead><tr><th>modelo</th>{qlabels}</tr></thead>

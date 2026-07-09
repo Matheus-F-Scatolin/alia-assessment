@@ -68,7 +68,8 @@ run: 2026-07-09T17:59:19-0300</p>
 <table><thead><tr><th></th><th>modelo</th><th style="text-align:right">score</th>
 <th style="text-align:right">corretas (≥0.7)</th><th style="text-align:right">alucinações</th>
 <th style="text-align:right">lineage recall</th><th style="text-align:right">cita IDs</th>
-<th style="text-align:right">latência média</th><th style="text-align:right">tools/pergunta</th></tr></thead>
+<th style="text-align:right">latência média</th><th style="text-align:right">tools/pergunta</th>
+<th style="text-align:right">custo (10 perguntas)</th><th style="text-align:right">score/US$</th></tr></thead>
 <tbody><tr>
 <td class="rank">1</td><td class="model">gemini-3.5-flash</td>
 <td class="num big">0.929</td>
@@ -78,6 +79,8 @@ run: 2026-07-09T17:59:19-0300</p>
 <td class="num">10/10</td>
 <td class="num">26.1s</td>
 <td class="num">11.8</td>
+<td class="num">$0.605</td>
+<td class="num">1.5</td>
 </tr><tr>
 <td class="rank">2</td><td class="model">claude-sonnet-5</td>
 <td class="num big">0.900</td>
@@ -87,6 +90,8 @@ run: 2026-07-09T17:59:19-0300</p>
 <td class="num">10/10</td>
 <td class="num">32.4s</td>
 <td class="num">10.2</td>
+<td class="num">$0.752</td>
+<td class="num">1.2</td>
 </tr><tr>
 <td class="rank">3</td><td class="model">claude-opus-4-8</td>
 <td class="num big">0.893</td>
@@ -96,6 +101,8 @@ run: 2026-07-09T17:59:19-0300</p>
 <td class="num">9/10</td>
 <td class="num">31.8s</td>
 <td class="num">7.5</td>
+<td class="num">$1.387</td>
+<td class="num">0.6</td>
 </tr><tr>
 <td class="rank">4</td><td class="model">gemini-3.1-pro-preview</td>
 <td class="num big">0.825</td>
@@ -105,6 +112,8 @@ run: 2026-07-09T17:59:19-0300</p>
 <td class="num">10/10</td>
 <td class="num">30.5s</td>
 <td class="num">10.6</td>
+<td class="num">$0.450</td>
+<td class="num">1.8</td>
 </tr><tr>
 <td class="rank">5</td><td class="model">gemini-3.1-flash-lite</td>
 <td class="num big">0.761</td>
@@ -114,6 +123,8 @@ run: 2026-07-09T17:59:19-0300</p>
 <td class="num">10/10</td>
 <td class="num">5.7s</td>
 <td class="num">4.8</td>
+<td class="num">$0.034</td>
+<td class="num">22.4</td>
 </tr><tr>
 <td class="rank">6</td><td class="model">claude-haiku-4-5-20251001</td>
 <td class="num big">0.742</td>
@@ -123,7 +134,15 @@ run: 2026-07-09T17:59:19-0300</p>
 <td class="num">9/10</td>
 <td class="num">15.1s</td>
 <td class="num">7.3</td>
+<td class="num">$0.230</td>
+<td class="num">3.2</td>
 </tr></tbody></table>
+<p class="legend">Custo computado dos tokens rastreados por run × preço de lista
+(2026-07-09): opus-4-8 $5/$25, sonnet-5 $2/$10 (preço introdutório até
+2026-08-31; padrão $3/$15), haiku-4-5 $1/$5, gemini-3.1-flash-lite $0.25/$1.50,
+gemini-3.5-flash $1.50/$9, gemini-3.1-pro-preview $2/$12 (faixa ≤200k), por 1M
+de tokens input/output. Exclui o custo do juiz (~60 chamadas de opus-4-8, não
+rastreadas). Sem prompt caching — o loop reenvia o histórico a cada turno.</p>
 
 <h2>Heatmap — modelo × pergunta</h2>
 <table class="hm"><thead><tr><th>modelo</th><th title='Por que os agentes do Bernardo quebraram?'>q01</th><th title='Onde está a negociação com o NGCash?'>q02</th><th title='O que muda com a saída do Henrique?'>q03</th><th title='Bernardo e Lucas estão alinhados sobre as camadas do medallion?'>q04</th><th title='Qual é o status do projeto LinkedIn Outreach?'>q05</th><th title='Como está a meta de três design partners pagos até junho?'>q06</th><th title='Quais são as restrições e os próximos passos do piloto com a VTEX?'>q07</th><th title='O que ficou decidido sobre como evidências vindas de entidades aparecem no painel?'>q08</th><th title='Como está o Alia Meetings e o que falta para escalar?'>q09</th><th title='Quais são os maiores riscos da empresa nesta semana (20 a 24 de abril de 2026)?'>q10</th></tr></thead>
@@ -151,7 +170,7 @@ casos marcados.</div>
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q01_agents_broke_disambiguation
 <span class="meta">27.3s · 10 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0701</span></summary>
 <div class="body">
 <p class="q">Por que os agentes do Bernardo quebraram?</p>
 <div class="cols">
@@ -195,7 +214,7 @@ Como o usuário do sistema Alia, é valioso notar estes fatores que afetam diret
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q02_ngcash_negotiation
 <span class="meta">23.4s · 10 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0578</span></summary>
 <div class="body">
 <p class="q">Onde está a negociação com o NGCash?</p>
 <div class="cols">
@@ -230,7 +249,7 @@ Esse acúmulo de responsabilidades de transição técnica (saída de Henrique) 
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q03_henrique_exit_impact
 <span class="meta">17.3s · 8 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0351</span></summary>
 <div class="body">
 <p class="q">O que muda com a saída do Henrique?</p>
 <div class="cols">
@@ -264,7 +283,7 @@ Para mitigar a saída de Henrique e garantir que não haja um ponto único de fa
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q04_alignment_demo_case
 <span class="meta">21.3s · 14 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0615</span></summary>
 <div class="body">
 <p class="q">Bernardo e Lucas estão alinhados sobre as camadas do medallion?</p>
 <div class="cols">
@@ -295,7 +314,7 @@ A urgência escalou após os seguintes acontecimentos:
 <summary><span class="badge" style="background:hsl(36, 55%, 30%)">0.57</span>
 q05_linkedin_thin_data
 <span class="meta">25.7s · 12 tools ·
-lineage recall n/a</span></summary>
+lineage recall n/a · $0.0494</span></summary>
 <div class="body">
 <p class="q">Qual é o status do projeto LinkedIn Outreach?</p>
 <div class="cols">
@@ -322,7 +341,7 @@ Embora o projeto esteja ativo e gerando economias, há um cenário de risco quan
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q06_design_partners_goal
 <span class="meta">21.9s · 12 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0547</span></summary>
 <div class="body">
 <p class="q">Como está a meta de três design partners pagos até junho?</p>
 <div class="cols">
@@ -363,7 +382,7 @@ Há um fator crítico nos bastidores que pode afetar a entrega técnica necessá
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q07_vtex_constraints
 <span class="meta">40.4s · 13 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1097</span></summary>
 <div class="body">
 <p class="q">Quais são as restrições e os próximos passos do piloto com a VTEX?</p>
 <div class="cols">
@@ -401,7 +420,7 @@ Esse cenário de crise técnica pode atrasar a resposta e a preparação de Bern
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q08_advisors_evidence_decision
 <span class="meta">20.2s · 11 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0509</span></summary>
 <div class="body">
 <p class="q">O que ficou decidido sobre como evidências vindas de entidades aparecem no painel?</p>
 <div class="cols">
@@ -434,7 +453,7 @@ Embora a exibição dessas evidências esteja avançando no produto, a camada qu
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q09_meetings_scale_gap
 <span class="meta">18.9s · 9 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0327</span></summary>
 <div class="body">
 <p class="q">Como está o Alia Meetings e o que falta para escalar?</p>
 <div class="cols">
@@ -476,7 +495,7 @@ Ao analisarmos o ecossistema do projeto, há duas situações cruciais que merec
 <summary><span class="badge" style="background:hsl(122, 45%, 32%)">0.93</span>
 q10_week_risks_synthesis
 <span class="meta">44.2s · 19 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0830</span></summary>
 <div class="body">
 <p class="q">Quais são os maiores riscos da empresa nesta semana (20 a 24 de abril de 2026)?</p>
 <div class="cols">
@@ -518,7 +537,7 @@ A meta corporativa de fechar três *Design Partners* pagos até junho está conc
 <summary><span class="badge" style="background:hsl(0, 55%, 30%)">0.00</span>
 q01_agents_broke_disambiguation <span class='halluc'>◆ hallucination</span>
 <span class="meta">18.3s · 6 tools ·
-lineage recall 0.0</span></summary>
+lineage recall 0.0 · $0.0382</span></summary>
 <div class="body">
 <p class="q">Por que os agentes do Bernardo quebraram?</p>
 <div class="cols">
@@ -540,7 +559,7 @@ Thomas Filshill, ao validar o fix, sinalizou explicitamente que essa correção 
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q02_ngcash_negotiation
 <span class="meta">24.7s · 8 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0544</span></summary>
 <div class="body">
 <p class="q">Onde está a negociação com o NGCash?</p>
 <div class="cols">
@@ -570,7 +589,7 @@ Ou seja: a bola está do lado do NGCash, esperando validação interna deles sob
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q03_henrique_exit_impact
 <span class="meta">32.8s · 11 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0813</span></summary>
 <div class="body">
 <p class="q">O que muda com a saída do Henrique?</p>
 <div class="cols">
@@ -603,7 +622,7 @@ Toda a evidência primária aqui vem de duas fontes: a thread do Slack #alia-eng
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q04_alignment_demo_case
 <span class="meta">24.3s · 9 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0587</span></summary>
 <div class="body">
 <p class="q">Bernardo e Lucas estão alinhados sobre as camadas do medallion?</p>
 <div class="cols">
@@ -632,7 +651,7 @@ Ou seja: o entity layer corre risco real de ficar órfão se o handoff não for 
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q05_linkedin_thin_data
 <span class="meta">32.6s · 8 tools ·
-lineage recall n/a</span></summary>
+lineage recall n/a · $0.0688</span></summary>
 <div class="body">
 <p class="q">Qual é o status do projeto LinkedIn Outreach?</p>
 <div class="cols">
@@ -663,7 +682,7 @@ Vale destacar um ponto de atenção que não foi perguntado mas é pertinente: L
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q06_design_partners_goal
 <span class="meta">45.9s · 12 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0989</span></summary>
 <div class="body">
 <p class="q">Como está a meta de três design partners pagos até junho?</p>
 <div class="cols">
@@ -695,7 +714,7 @@ As três pernas convergem, direta ou indiretamente, em **Bernardo Aires**: ele �
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q07_vtex_constraints
 <span class="meta">29.3s · 8 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0590</span></summary>
 <div class="body">
 <p class="q">Quais são as restrições e os próximos passos do piloto com a VTEX?</p>
 <div class="cols">
@@ -728,7 +747,7 @@ lineage recall 1.0</span></summary>
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q08_advisors_evidence_decision
 <span class="meta">25.5s · 6 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0525</span></summary>
 <div class="body">
 <p class="q">O que ficou decidido sobre como evidências vindas de entidades aparecem no painel?</p>
 <div class="cols">
@@ -759,7 +778,7 @@ Vale notar também que essa mesma narrativa gold (gold-003) menciona uma segunda
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q09_meetings_scale_gap
 <span class="meta">28.7s · 10 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0626</span></summary>
 <div class="body">
 <p class="q">Como está o Alia Meetings e o que falta para escalar?</p>
 <div class="cols">
@@ -794,7 +813,7 @@ Isso é um ponto de atenção real: a pessoa que precisaria construir o dashboar
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q10_week_risks_synthesis
 <span class="meta">62.3s · 24 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1773</span></summary>
 <div class="body">
 <p class="q">Quais são os maiores riscos da empresa nesta semana (20 a 24 de abril de 2026)?</p>
 <div class="cols">
@@ -830,7 +849,7 @@ Gold (verbose para CEO + sistemático para dashboard) vai para produção hoje p
 <summary><span class="badge" style="background:hsl(0, 55%, 30%)">0.00</span>
 q01_agents_broke_disambiguation <span class='halluc'>◆ hallucination</span>
 <span class="meta">32.7s · 6 tools ·
-lineage recall 0.0</span></summary>
+lineage recall 0.0 · $0.1176</span></summary>
 <div class="body">
 <p class="q">Por que os agentes do Bernardo quebraram?</p>
 <div class="cols">
@@ -861,7 +880,7 @@ Se quiser, posso puxar a gold-001 para detalhar o risco do handoff do Henrique e
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q02_ngcash_negotiation
 <span class="meta">27.4s · 7 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1318</span></summary>
 <div class="body">
 <p class="q">Onde está a negociação com o NGCash?</p>
 <div class="cols">
@@ -894,7 +913,7 @@ Se quiser, posso descer nos silvers da VTEX e do Itaú (silver-011, silver-012, 
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q03_henrique_exit_impact
 <span class="meta">33.5s · 8 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1461</span></summary>
 <div class="body">
 <p class="q">O que muda com a saída do Henrique?</p>
 <div class="cols">
@@ -925,7 +944,7 @@ Uma observação sobre o lineage: o PR 312 aparece como merged em 2026-04-17 no 
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q04_alignment_demo_case
 <span class="meta">26.2s · 8 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1159</span></summary>
 <div class="body">
 <p class="q">Bernardo e Lucas estão alinhados sobre as camadas do medallion?</p>
 <div class="cols">
@@ -954,7 +973,7 @@ Um detalhe interessante: essa própria pergunta — sobre o alinhamento nas cama
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q05_linkedin_thin_data
 <span class="meta">21.6s · 4 tools ·
-lineage recall n/a</span></summary>
+lineage recall n/a · $0.0692</span></summary>
 <div class="body">
 <p class="q">Qual é o status do projeto LinkedIn Outreach?</p>
 <div class="cols">
@@ -984,7 +1003,7 @@ Quer que eu investigue o handoff da entity layer com o Henrique ou o estado do A
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q06_design_partners_goal
 <span class="meta">31.9s · 8 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1543</span></summary>
 <div class="body">
 <p class="q">Como está a meta de três design partners pagos até junho?</p>
 <div class="cols">
@@ -1013,7 +1032,7 @@ Uma observação de completude: os dados mostram bem o **pipeline e o estado das
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q07_vtex_constraints
 <span class="meta">33.3s · 7 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1455</span></summary>
 <div class="body">
 <p class="q">Quais são as restrições e os próximos passos do piloto com a VTEX?</p>
 <div class="cols">
@@ -1048,7 +1067,7 @@ Observação sobre cobertura: os dados sobre VTEX se concentram numa única font
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q08_advisors_evidence_decision
 <span class="meta">37.7s · 7 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1795</span></summary>
 <div class="body">
 <p class="q">O que ficou decidido sobre como evidências vindas de entidades aparecem no painel?</p>
 <div class="cols">
@@ -1082,7 +1101,7 @@ Se quiser, posso puxar o objetivo &quot;Evidence-from-Entities Dashboard Spec&qu
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q09_meetings_scale_gap
 <span class="meta">28.7s · 8 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1360</span></summary>
 <div class="body">
 <p class="q">Como está o Alia Meetings e o que falta para escalar?</p>
 <div class="cols">
@@ -1115,7 +1134,7 @@ Uma observação de completude: os dados cobrem bem o estado técnico e a meta, 
 <summary><span class="badge" style="background:hsl(122, 45%, 32%)">0.93</span>
 q10_week_risks_synthesis
 <span class="meta">44.7s · 12 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.1912</span></summary>
 <div class="body">
 <p class="q">Quais são os maiores riscos da empresa nesta semana (20 a 24 de abril de 2026)?</p>
 <div class="cols">
@@ -1155,7 +1174,7 @@ A parceria com a VTEX foi aceita conceitualmente, mas está **bloqueada em escop
 <summary><span class="badge" style="background:hsl(16, 55%, 30%)">0.25</span>
 q01_agents_broke_disambiguation <span class='halluc'>◆ hallucination</span>
 <span class="meta">25.5s · 8 tools ·
-lineage recall 0.0</span></summary>
+lineage recall 0.0 · $0.0297</span></summary>
 <div class="body">
 <p class="q">Por que os agentes do Bernardo quebraram?</p>
 <div class="cols">
@@ -1180,7 +1199,7 @@ Isso está acontecendo em caráter emergencial devido à saída de Henrique Silv
 <summary><span class="badge" style="background:hsl(16, 55%, 30%)">0.25</span>
 q02_ngcash_negotiation <span class='halluc'>◆ hallucination</span>
 <span class="meta">23.1s · 7 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0327</span></summary>
 <div class="body">
 <p class="q">Onde está a negociação com o NGCash?</p>
 <div class="cols">
@@ -1205,7 +1224,7 @@ João Bogado sinalizou que toparia o ritmo de feedback proposto se conseguirem f
 <summary><span class="badge" style="background:hsl(122, 45%, 32%)">0.93</span>
 q03_henrique_exit_impact
 <span class="meta">31.7s · 9 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0448</span></summary>
 <div class="body">
 <p class="q">O que muda com a saída do Henrique?</p>
 <div class="cols">
@@ -1230,7 +1249,7 @@ Atualmente, o maior risco é o *Entity Layer* se tornar &quot;órfão&quot; com 
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q04_alignment_demo_case
 <span class="meta">22.4s · 9 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0399</span></summary>
 <div class="body">
 <p class="q">Bernardo e Lucas estão alinhados sobre as camadas do medallion?</p>
 <div class="cols">
@@ -1257,7 +1276,7 @@ De forma bem interessante, os dados brutos apontam que Bernardo utilizou exatame
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q05_linkedin_thin_data
 <span class="meta">39.1s · 12 tools ·
-lineage recall n/a</span></summary>
+lineage recall n/a · $0.0602</span></summary>
 <div class="body">
 <p class="q">Qual é o status do projeto LinkedIn Outreach?</p>
 <div class="cols">
@@ -1285,7 +1304,7 @@ Dessa forma, o LinkedIn Outreach estabilizou na operação gerando valor, enquan
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q06_design_partners_goal
 <span class="meta">36.5s · 13 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0630</span></summary>
 <div class="body">
 <p class="q">Como está a meta de três design partners pagos até junho?</p>
 <div class="cols">
@@ -1321,7 +1340,7 @@ Observando a rede de entidades envolvidas nessas conversas, dois fatores paralel
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q07_vtex_constraints
 <span class="meta">21.9s · 9 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0339</span></summary>
 <div class="body">
 <p class="q">Quais são as restrições e os próximos passos do piloto com a VTEX?</p>
 <div class="cols">
@@ -1347,7 +1366,7 @@ A resolução do escopo de dados é uma dependência direta e atual que bloqueia
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q08_advisors_evidence_decision
 <span class="meta">30.4s · 14 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0547</span></summary>
 <div class="body">
 <p class="q">O que ficou decidido sobre como evidências vindas de entidades aparecem no painel?</p>
 <div class="cols">
@@ -1377,7 +1396,7 @@ Como você buscou sobre elementos atrelados ao projeto Gold Synthesis, há infor
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q09_meetings_scale_gap
 <span class="meta">25.8s · 6 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0277</span></summary>
 <div class="body">
 <p class="q">Como está o Alia Meetings e o que falta para escalar?</p>
 <div class="cols">
@@ -1400,7 +1419,7 @@ Olhando para os donos e as arestas ativas dos projetos, um fator relevante é qu
 <summary><span class="badge" style="background:hsl(122, 45%, 32%)">0.93</span>
 q10_week_risks_synthesis
 <span class="meta">48.9s · 19 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0629</span></summary>
 <div class="body">
 <p class="q">Quais são os maiores riscos da empresa nesta semana (20 a 24 de abril de 2026)?</p>
 <div class="cols">
@@ -1429,7 +1448,7 @@ Um contexto relevante puxado pelas dinâmicas acima é o alinhamento de infraest
 <summary><span class="badge" style="background:hsl(0, 55%, 30%)">0.00</span>
 q01_agents_broke_disambiguation <span class='halluc'>◆ hallucination</span>
 <span class="meta">5.6s · 5 tools ·
-lineage recall 0.0</span></summary>
+lineage recall 0.0 · $0.0036</span></summary>
 <div class="body">
 <p class="q">Por que os agentes do Bernardo quebraram?</p>
 <div class="cols">
@@ -1453,7 +1472,7 @@ Embora o problema tenha sido resolvido, **Thomas Filshill** pontuou que o *fix* 
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q02_ngcash_negotiation
 <span class="meta">4.8s · 4 tools ·
-lineage recall 0.667</span></summary>
+lineage recall 0.667 · $0.0032</span></summary>
 <div class="body">
 <p class="q">Onde está a negociação com o NGCash?</p>
 <div class="cols">
@@ -1477,7 +1496,7 @@ Embora você tenha perguntado especificamente sobre o NGCash, vale notar que est
 <summary><span class="badge" style="background:hsl(122, 45%, 32%)">0.93</span>
 q03_henrique_exit_impact
 <span class="meta">6.7s · 4 tools ·
-lineage recall 0.667</span></summary>
+lineage recall 0.667 · $0.0031</span></summary>
 <div class="body">
 <p class="q">O que muda com a saída do Henrique?</p>
 <div class="cols">
@@ -1502,7 +1521,7 @@ Além disso, a migração do Lucas Quaresma para o *core* é uma dependência di
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q04_alignment_demo_case
 <span class="meta">5.0s · 7 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0036</span></summary>
 <div class="body">
 <p class="q">Bernardo e Lucas estão alinhados sobre as camadas do medallion?</p>
 <div class="cols">
@@ -1528,7 +1547,7 @@ Esta transição está sendo tratada como um ponto crítico de continuidade para
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q05_linkedin_thin_data
 <span class="meta">9.0s · 6 tools ·
-lineage recall n/a</span></summary>
+lineage recall n/a · $0.0035</span></summary>
 <div class="body">
 <p class="q">Qual é o status do projeto LinkedIn Outreach?</p>
 <div class="cols">
@@ -1554,7 +1573,7 @@ Não foram encontradas narrativas *gold* específicas sobre o status atual ou pl
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q06_design_partners_goal
 <span class="meta">5.3s · 4 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0035</span></summary>
 <div class="body">
 <p class="q">Como está a meta de três design partners pagos até junho?</p>
 <div class="cols">
@@ -1580,7 +1599,7 @@ Além do progresso direto, há uma dependência crítica para o sucesso destas p
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q07_vtex_constraints
 <span class="meta">5.1s · 5 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0036</span></summary>
 <div class="body">
 <p class="q">Quais são as restrições e os próximos passos do piloto com a VTEX?</p>
 <div class="cols">
@@ -1611,7 +1630,7 @@ Como alternativa para contornar essa trava e iniciar o projeto, a estratégia é
 <summary><span class="badge" style="background:hsl(110, 45%, 32%)">0.80</span>
 q08_advisors_evidence_decision
 <span class="meta">4.9s · 4 tools ·
-lineage recall 0.833</span></summary>
+lineage recall 0.833 · $0.0029</span></summary>
 <div class="body">
 <p class="q">O que ficou decidido sobre como evidências vindas de entidades aparecem no painel?</p>
 <div class="cols">
@@ -1635,7 +1654,7 @@ Ao investigar os projetos relacionados a essa decisão, notei um ponto crítico 
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q09_meetings_scale_gap
 <span class="meta">5.1s · 5 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0034</span></summary>
 <div class="body">
 <p class="q">Como está o Alia Meetings e o que falta para escalar?</p>
 <div class="cols">
@@ -1664,7 +1683,7 @@ Para atingir o objetivo de **&quot;Meetings at Production Scale&quot;** (20+ reu
 <summary><span class="badge" style="background:hsl(25, 55%, 30%)">0.38</span>
 q10_week_risks_synthesis
 <span class="meta">5.9s · 4 tools ·
-lineage recall 0.5</span></summary>
+lineage recall 0.5 · $0.0035</span></summary>
 <div class="body">
 <p class="q">Quais são os maiores riscos da empresa nesta semana (20 a 24 de abril de 2026)?</p>
 <div class="cols">
@@ -1692,7 +1711,7 @@ Embora o risco acima seja o foco imediato, há movimentações relevantes no *pi
 <summary><span class="badge" style="background:hsl(0, 55%, 30%)">0.00</span>
 q01_agents_broke_disambiguation <span class='halluc'>◆ hallucination</span>
 <span class="meta">13.8s · 6 tools ·
-lineage recall 0.0</span></summary>
+lineage recall 0.0 · $0.0222</span></summary>
 <div class="body">
 <p class="q">Por que os agentes do Bernardo quebraram?</p>
 <div class="cols">
@@ -1721,7 +1740,7 @@ Thomas Filshill sinalizou que **este foi um fix reativo** — o sistema não tin
 <summary><span class="badge" style="background:hsl(16, 55%, 30%)">0.25</span>
 q02_ngcash_negotiation <span class='halluc'>◆ hallucination</span>
 <span class="meta">12.8s · 7 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0208</span></summary>
 <div class="body">
 <p class="q">Onde está a negociação com o NGCash?</p>
 <div class="cols">
@@ -1751,7 +1770,7 @@ A negociação com NGCash está em **estágio avançado, aguardando resposta int
 <summary><span class="badge" style="background:hsl(122, 45%, 32%)">0.93</span>
 q03_henrique_exit_impact
 <span class="meta">16.8s · 9 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0278</span></summary>
 <div class="body">
 <p class="q">O que muda com a saída do Henrique?</p>
 <div class="cols">
@@ -1790,7 +1809,7 @@ A saída do Henrique expõe que o **entity layer é atualmente a maior vulnerabi
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q04_alignment_demo_case
 <span class="meta">15.6s · 8 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0266</span></summary>
 <div class="body">
 <p class="q">Bernardo e Lucas estão alinhados sobre as camadas do medallion?</p>
 <div class="cols">
@@ -1829,7 +1848,7 @@ O entity layer corre risco de orfandade se o handoff não se completar antes de 
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q05_linkedin_thin_data
 <span class="meta">4.8s · 2 tools ·
-lineage recall n/a</span></summary>
+lineage recall n/a · $0.0078</span></summary>
 <div class="body">
 <p class="q">Qual é o status do projeto LinkedIn Outreach?</p>
 <div class="cols">
@@ -1850,7 +1869,7 @@ O projeto foi criado em dezembro de 2025 com o objetivo de substituir ferramenta
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q06_design_partners_goal
 <span class="meta">18.8s · 6 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0221</span></summary>
 <div class="body">
 <p class="q">Como está a meta de três design partners pagos até junho?</p>
 <div class="cols">
@@ -1891,7 +1910,7 @@ Todos os três caminhos estão abertos, mas nenhum está fechado. Os próximos d
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q07_vtex_constraints
 <span class="meta">12.7s · 7 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0220</span></summary>
 <div class="body">
 <p class="q">Quais são as restrições e os próximos passos do piloto com a VTEX?</p>
 <div class="cols">
@@ -1927,7 +1946,7 @@ Este piloto é uma das três posições da meta **&quot;Três Design Partners Pa
 <summary><span class="badge" style="background:hsl(120, 45%, 32%)">0.90</span>
 q08_advisors_evidence_decision
 <span class="meta">13.5s · 5 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0191</span></summary>
 <div class="body">
 <p class="q">O que ficou decidido sobre como evidências vindas de entidades aparecem no painel?</p>
 <div class="cols">
@@ -1958,7 +1977,7 @@ Thomas Filshill ficou de retornar com um mockup da solução [bronze-meet-008].<
 <summary><span class="badge" style="background:hsl(130, 45%, 32%)">1.00</span>
 q09_meetings_scale_gap
 <span class="meta">15.3s · 10 tools ·
-lineage recall 1.0</span></summary>
+lineage recall 1.0 · $0.0242</span></summary>
 <div class="body">
 <p class="q">Como está o Alia Meetings e o que falta para escalar?</p>
 <div class="cols">
@@ -1991,7 +2010,7 @@ Um fator a observar: **Lucas Quaresma está em transição para work de core** (
 <summary><span class="badge" style="background:hsl(35, 55%, 30%)">0.54</span>
 q10_week_risks_synthesis
 <span class="meta">26.4s · 13 tools ·
-lineage recall 0.5</span></summary>
+lineage recall 0.5 · $0.0372</span></summary>
 <div class="body">
 <p class="q">Quais são os maiores riscos da empresa nesta semana (20 a 24 de abril de 2026)?</p>
 <div class="cols">
