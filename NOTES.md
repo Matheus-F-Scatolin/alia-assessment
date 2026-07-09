@@ -20,7 +20,33 @@ Três camadas, uma por commit:
    (sugestões e IDs conhecidos) para o loop nunca quebrar com input ruim.
 3. **`answer.py`** -> o loop de agente + CLI. System prompt descreve a
    estrutura do medallion e o contrato da resposta; o loop roda até o modelo
-   parar de pedir tools (máx. 15 turnos).
+   parar de pedir tools (máx. 15 turnos). Suporta dois providers: modelos
+   `claude-*` via API Anthropic e `gemini-*` via API Gemini. O default é
+   `gemini-3.5-flash` — vencedor do eval em `eval/` (score 0.929, zero
+   alucinações, lineage recall 1.0, ~2.3x mais barato que Opus; ver
+   `eval/report.html`). Override com a env `ALIA_MODEL`.
+
+## As tools que o LLM enxerga
+
+O agente não recebe o corpus — recebe seis tools sobre a camada de dados
+(`tools.py`), e o system prompt o instrui a seguir o lineage. Todas retornam
+JSON; erros voltam como dados (com sugestões e IDs conhecidos), nunca como
+exceção, para o loop não quebrar com input ruim.
+
+| Tool | Input | O que devolve |
+|---|---|---|
+| `search_entities` | `query` (nome/papel/termo) | Até 8 nós do knowledge graph (pessoas, projetos, goals, objectives) por busca fuzzy insensível a acentos: ref, papel, descrição, `active` e `valid_to`. Primeiro passo típico: resolver quem/o quê a pergunta menciona. |
+| `get_entity` | `ref` exata (ex: `Person:Bernardo Aires`) | O nó completo + arestas de 1 salto (`member_of`, `collaborates_with`, `RELATES_TO`, com `details` e `valid_to`) + IDs de golds/silvers que citam a entidade. É a tool do "contexto adjacente": é por ela que o agente descobre sozinho, p.ex., que o dono do entity layer está saindo. Refs quase-corretas são resolvidas via busca. |
+| `search_golds` | `query` (tema/entidade) | Narrativas gold rankeadas por overlap com título, narrativa, topic_key e entidades: id, topic_key, título, entity_refs. Ponto de entrada do lineage. |
+| `get_gold` | `gold_id` | A narrativa completa + `silver_refs` + o lineage resolvido até os bronzes (`lineage.silvers`, `lineage.bronzes`). |
+| `get_silvers` | `silver_ids` (lista) | As interpretações silver completas: texto, project_ref, entity_refs, `bronze_refs` e timestamp. Aceita lote para descer o lineage numa chamada. |
+| `get_bronze` | `bronze_id` | O datapoint bruto renderizado como texto legível por fonte (thread de Slack, transcrição de Meet, PR do GitHub, thread de email, página de Notion) + quais silvers o citam (lineage reverso). Evidência primária para os fatos centrais. |
+
+A travessia esperada espelha o medallion: pergunta -> `search_entities` /
+`search_golds` -> `get_gold` -> `get_silvers` -> `get_bronze`, com
+`get_entity` abrindo o grafo lateralmente. O loop rastreia quais IDs foram
+de fato consultados por essas tools — é disso que sai o rodapé verificado
+de lineage.
 
 ## Decisões e porquês
 
@@ -83,8 +109,12 @@ Três camadas, uma por commit:
 
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
-echo "ANTHROPIC_API_KEY=sk-..." > .env
+echo "GEMINI_API_KEY=..." > .env       # default: gemini-3.5-flash
+echo "ANTHROPIC_API_KEY=sk-..." >> .env  # só se usar ALIA_MODEL=claude-*
 .venv/bin/python answer.py "Onde está a negociação com o NGCash?"
+
+# outro modelo:
+ALIA_MODEL=claude-sonnet-5 .venv/bin/python answer.py "..."
 ```
 
 Saídas das 6 perguntas (4 do README + 2 extras) em `sample_output.txt`,

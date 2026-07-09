@@ -195,7 +195,7 @@ def run_model(question: str, model: str) -> dict:
 if __name__ == "__main__":
     load_env()
     q = sys.argv[2] if len(sys.argv) > 2 else "Onde está a negociação com o NGCash?"
-    model = sys.argv[1] if len(sys.argv) > 1 else "claude-haiku-4-5-20251001"
+    model = sys.argv[1] if len(sys.argv) > 1 else "gemini-3.5-flash"
     out = run_model(q, model)
     print(json.dumps({k: v for k, v in out.items() if k != "text"},
                      ensure_ascii=False, indent=2))
